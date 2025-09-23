@@ -1,0 +1,91 @@
+/* login.ccs - Basic CSS for login page */
+
+body {
+    background-color: #022626;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    padding-top: 50px; /* moves all body content down */
+}
+
+.login-container {
+    width: 300px;
+    margin: 100px auto;
+    padding: 30px;
+    background: #FFBB98;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Flex container for heading and timestamp */
+.header-container {
+    display: flex;               /* place children in a row */
+    align-items: center;         /* vertically align heading and circle */
+    text-align: center;
+    align-items: center;  
+    justify-content: center;     /* center text horizontally */ 
+    display: flex;      /* center text vertically */
+    gap: 20px;                   /* space between heading and timestamp */
+    margin-top: 20px;
+    margin-left: 20px;
+    
+    justify-content: space-between; /* push h1 to left, timestamp to right */
+}
+
+/* Heading styling */
+/* Timestamp circle */
+#timestamp {
+    width: 150px;               /* circle width */
+    height: 150px;              /* circle height = width for perfect circle */
+    text-align: center;
+    border-radius: 30%;          /* makes it a perfect circle */
+    border: 4px solid #174e41;  /* dark border */
+    background: #FFBB98;
+    display: flex;               
+    align-items: center;         /* center text vertically */
+    justify-content: center;     /* center text horizontally */
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 20px;          /* perfect circle */
+
+}
+
+
+.loginbutton input[type="button"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #57B09B; 
+    border: none;
+    border-radius: 25px; 
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+}
+.logo-container {
+    display: flex;                  /* horizontal layout */
+    align-items: center;            /* vertically center image and text */
+    justify-content: center;        /* center container horizontally on page */
+    gap: 10px;                      /* space between image and text */
+    margin-bottom: 30px;            /* space below logo */
+}
+
+.logo-image {
+    width: 50px;                    /* adjust size as needed */
+    height: 50px;
+}
+
+.logo-text {
+    font-size: 32px;
+    font-weight: bold;
+    color: #FFBB98;                 /* matching your color theme */
+}
