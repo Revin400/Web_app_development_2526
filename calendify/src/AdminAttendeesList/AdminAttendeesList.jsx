@@ -5,7 +5,7 @@ export default function AdminAttendeesList() {
     { id: 2, name: "Bob Smith" },
     { id: 3, name: "Charlie Kim" },
     { id: 4, name: "Dana Lee" },
-    { id: 5, name: "Evan Brown" },
+    { id: 5, name: "Evan White" },
   ];
 
   return (
