@@ -4,6 +4,7 @@ body {
     background-color: #022626;
     font-family: Arial, sans-serif;
     margin: 0;
+    height:100%;
     padding: 0;
     padding-top: 50px; /* moves all body content down */
 }
@@ -15,38 +16,18 @@ body {
     background: #FFBB98;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
 }
 
-/* Flex container for heading and timestamp */
-.header-container {
-    display: flex;               /* place children in a row */
-    align-items: center;         /* vertically align heading and circle */
-    text-align: center;
-    align-items: center;  
-    justify-content: center;     /* center text horizontally */ 
-    display: flex;      /* center text vertically */
-    gap: 20px;                   /* space between heading and timestamp */
-    margin-top: 20px;
-    margin-left: 20px;
-    
-    justify-content: space-between; /* push h1 to left, timestamp to right */
+
+
+
+.loginbutton input:active {
+  box-shadow:
+    inset -2px -2px 3px rgb(255 255 255 / 0.6),
+    inset 2px 2px 3px rgb(0 0 0 / 0.6);
 }
 
-/* Heading styling */
-/* Timestamp circle */
-#timestamp {
-    width: 150px;               /* circle width */
-    height: 150px;              /* circle height = width for perfect circle */
-    text-align: center;
-    border-radius: 30%;          /* makes it a perfect circle */
-    border: 4px solid #174e41;  /* dark border */
-    background: #FFBB98;
-    display: flex;               
-    align-items: center;         /* center text vertically */
-    justify-content: center;     /* center text horizontally */
-    font-weight: bold;
-    font-size: 20px;
-}
 
 .login-container input[type="text"],
 .login-container input[type="password"] {
@@ -56,20 +37,26 @@ body {
     border: 1px solid #ccc;
     border-radius: 20px;          /* perfect circle */
 
+
 }
 
 
-.loginbutton input[type="button"] {
+.loginbutton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    padding: 12px;
+    margin-top: 20px;
+}
+
+.loginbutton input[type="button"] {
+    width: 50%;
+    padding: 10px;
     background-color: #57B09B; 
     border: none;
     border-radius: 25px; 
     color: white;
     font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
 }
 .logo-container {
     display: flex;                  /* horizontal layout */
@@ -77,6 +64,8 @@ body {
     justify-content: center;        /* center container horizontally on page */
     gap: 10px;                      /* space between image and text */
     margin-bottom: 30px;            /* space below logo */
+    margin-top: 20px;
+
 }
 
 .logo-image {
