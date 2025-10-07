@@ -1,8 +1,12 @@
 import './App.css';
-import LoginPage from './Login';
+import WelcomeScreen from './WelcomeScreen';
+
 function App() {
   return (
-    <LoginPage/>
+    <div className="App">
+      <WelcomeScreen />
+
+    </div>
   );
 }
 
