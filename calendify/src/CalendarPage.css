@@ -1,0 +1,139 @@
+:root{
+  --bg: #162C27;        /* deep teal background */
+  --seg-outline:#1c6f6d;
+  --seg-bg:#113c3a;
+  --seg-fill:#7f6f5e;   /* selected pill fill */
+  --card:#FFBB98;       /* card background */
+  --shadow: 0 5px 10px rgba(0, 0, 0, 0.685);
+  --radius: 14px;
+  --pill: 999px;
+}
+
+*{box-sizing:border-box}
+html,
+body{
+  margin:0;
+  font-family: 'Inter', sans-serif;
+  font-size: 23px;
+  background:var(--bg);}
+
+.page{
+  display:flex;
+  flex-direction:column;
+}
+
+.topbar{
+  padding:16px 22px;
+}
+.segment{
+  grid-area: segment;
+  display:inline-flex;
+  justify-self: start;
+  gap:6px;
+  background:var(--bg);
+  border-radius:var(--pill);
+  padding:4px;
+  box-shadow:var(--shadow);
+}
+.seg-btn{
+  border:0;
+  background:var(--bg);
+  color:var(--seg-fill);
+  font-weight:700;
+  font-size: 23px;
+  padding:10px 40px;
+  border-radius:var(--pill);
+  cursor:default;
+}
+.seg-btn.is-active{
+  background:var(--seg-fill);
+  color:#1f2322;
+}
+
+.content{
+  display: grid;
+  grid-template-columns: max-content; 
+  grid-template-rows: auto;          
+  grid-template-areas:
+    "segment segment"
+    "cards   sidebar";
+  gap: 80px;
+  margin: 250px auto;
+  padding: auto;
+  width: 92vw;         
+  max-width: 1200px;   
+  padding: 0 16px;                
+}    
+
+@media (max-width: 1439px){
+  .content{ max-width: 960px; }
+}
+
+@media (max-width: 1024px){
+  .content{
+    max-width: 720px;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "segment"
+      "cards"
+      "sidebar";
+    gap: 40px;
+    margin: 80px auto;
+  }
+}
+
+@media (max-width: 640px){
+  .content{
+    max-width: 560px;
+    gap: 28px;
+    margin: 60px auto;
+  }
+}
+
+.cards{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+  
+}
+
+.card{
+  background:var(--seg-fill);
+  border-radius:var(--radius);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:var(--shadow);
+  color: var(--bg);
+  font-family: 'Inter';
+  font-size: 26px;  
+  height:125px;
+  width: 125px;
+  border: none;
+}
+
+.card-btn.is-active{
+  background:var(--card);
+}
+
+.sidebar{
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  height: 100%;
+  width: 100%;          
+  padding: 20px 22px;
+  color: var(--bg);
+}
+
+
+.sidebar h2{
+  color: var(--bg);
+  margin: 0 0 12px;
+}
+
+.remove-event-link{
+  color: red;
+  text-decoration: underline;
+  cursor: pointer;
+} 
