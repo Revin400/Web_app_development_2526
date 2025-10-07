@@ -1,0 +1,80 @@
+/* login.ccs - Basic CSS for login page */
+
+body {
+    background-color: #022626;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    height:100%;
+    padding: 0;
+    padding-top: 50px; /* moves all body content down */
+}
+
+.login-container {
+    width: 300px;
+    margin: 100px auto;
+    padding: 30px;
+    background: #FFBB98;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+}
+
+
+
+
+.loginbutton input:active {
+  box-shadow:
+    inset -2px -2px 3px rgb(255 255 255 / 0.6),
+    inset 2px 2px 3px rgb(0 0 0 / 0.6);
+}
+
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 20px;          /* perfect circle */
+
+
+}
+
+
+.loginbutton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.loginbutton input[type="button"] {
+    width: 50%;
+    padding: 10px;
+    background-color: #57B09B; 
+    border: none;
+    border-radius: 25px; 
+    color: white;
+    font-size: 16px;
+}
+.logo-container {
+    display: flex;                  /* horizontal layout */
+    align-items: center;            /* vertically center image and text */
+    justify-content: center;        /* center container horizontally on page */
+    gap: 10px;                      /* space between image and text */
+    margin-bottom: 30px;            /* space below logo */
+    margin-top: 20px;
+
+}
+
+.logo-image {
+    width: 50px;                    /* adjust size as needed */
+    height: 50px;
+}
+
+.logo-text {
+    font-size: 32px;
+    font-weight: bold;
+    color: #FFBB98;                 /* matching your color theme */
+}
