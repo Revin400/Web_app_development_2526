@@ -60,7 +60,34 @@ body{
   gap: 80px;
   margin: 250px auto;
   padding: auto;
-  width: 40%;                     
+  width: 92vw;         
+  max-width: 1200px;   
+  padding: 0 16px;                
+}    
+
+@media (max-width: 1439px){
+  .content{ max-width: 960px; }
+}
+
+@media (max-width: 1024px){
+  .content{
+    max-width: 720px;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "segment"
+      "cards"
+      "sidebar";
+    gap: 40px;
+    margin: 80px auto;
+  }
+}
+
+@media (max-width: 640px){
+  .content{
+    max-width: 560px;
+    gap: 28px;
+    margin: 60px auto;
+  }
 }
 
 .cards{
@@ -105,4 +132,8 @@ body{
   margin: 0 0 12px;
 }
 
-
+.remove-event-link{
+  color: red;
+  text-decoration: underline;
+  cursor: pointer;
+} 

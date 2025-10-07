@@ -47,8 +47,10 @@ const CalendarPage = () => {
           <br></br>
           <h2>Notes:</h2>
           <p>Initial kickoff meeting to align teams on project scope, deliverables, and timeline. Bring laptops and review the draft project charter in advance.</p>
+          <a class="remove-event-link" href="#">Remove Event</a>
         </aside>
       </section>
+     
     </div>
   );
 };
