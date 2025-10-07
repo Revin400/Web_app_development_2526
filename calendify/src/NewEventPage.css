@@ -1,0 +1,106 @@
+:root{
+  --bg: #162C27;       
+  --seg-outline:#1c6f6d;
+  --seg-bg:#113c3a;
+  --card:#FFBB98;     
+  --shadow: 0 5px 10px rgba(0, 0, 0, 0.418);
+  --radius: 14px;
+  --pill: 999px;
+}
+
+html,
+body{
+  margin:0;
+  font-family: 'Inter';
+  font-size: 23px;
+  }
+
+.close-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.closebtnn{
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--card);
+    background: var(--bg);
+    padding: 5px 14px;
+    border-radius: 100%;
+    box-shadow: var(--shadow);
+}
+
+.neweventpill{
+    background: var(--bg);
+    color: var(--card);
+    padding: 8px 20px;
+    border-radius: var(--pill);
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: var(--shadow);
+    margin-left:30%;
+  
+}
+
+.new-event-form {
+    background: var(--card);
+    padding: 35px;
+    width: 700px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+.form-section-1, .form-section-2, .form-section-3 {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 10px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+
+}
+
+.input-field {
+    margin-bottom: 10px;
+    padding: 10px;
+    border:none;
+    border-bottom: #dadada 1px solid;
+    font-size: 16px;
+}
+
+
+.row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 2px;
+}
+
+
+.pickers{ display:flex; gap:8px; }
+
+.chip-input{
+  background:#e6e7e9;
+  color:var(--bg);
+  border:0;
+  border-radius:14px;
+  padding:6px 10px;
+  font-size:14px;
+  line-height:1;
+  outline:none;
+}
+
+.confirm-btn{
+  background:var(--bg);
+  color:var(--card);
+  border:0;
+  font-weight: bold;
+  border-radius:15px;
+  padding:8px 20px;
+  font-size:18px;
+  cursor:pointer;
+  float: right;
+}
+
