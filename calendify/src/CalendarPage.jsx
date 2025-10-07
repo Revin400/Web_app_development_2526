@@ -1,7 +1,10 @@
 import "./CalendarPage.css";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 const CalendarPage = () => {
   const [activeCard, setActiveCard] = React.useState(null);
+  const navigate = useNavigate();
+
 
   const eventDays = [
     { day: 1, weekday: "MON" },
@@ -16,20 +19,22 @@ const CalendarPage = () => {
       </header>
 
       <section className="content">
-        <div className="segment">
-          <button className="seg-btn is-active">events</button>
-          <button className="seg-btn">reminders</button>
+        <div className="segment-row">
+          <div className="segment">
+            <button className="seg-btn is-active">events</button>
+            <button className="seg-btn">reminders</button>
+          </div>
+          <button className="add-event-btn" onClick={() => navigate("/new-event")}>+ Add Event</button>
         </div>
         <div className="cards">
           {eventDays.map(({ day, weekday }) => (
             <button
               key={day}
-              className={`card card-btn${
-                activeCard === day ? " is-active" : ""
-              }`}
+              className={`card card-btn${activeCard === day ? " is-active" : ""
+                }`}
               onClick={() => setActiveCard(day)}
             >
-             {weekday}  <br /> <span style={{ fontSize: "2em", fontWeight: "bold" }}>{day}</span>
+              {weekday}  <br /> <span style={{ fontSize: "2em", fontWeight: "bold" }}>{day}</span>
             </button>
           ))}
         </div>
@@ -39,7 +44,7 @@ const CalendarPage = () => {
           <p>Conference Room 2B</p>
           <br />
           <small>Tuesday, September 9, 2025<br />
-10:00 am to 11:30 am</small>
+            10:00 am to 11:30 am</small>
           <br />
           <p>
             <h4 style={{ display: "inline", margin: 0 }}>Hosted by:</h4> Sarah Johnson <br></br>(Product Manager)
@@ -50,7 +55,7 @@ const CalendarPage = () => {
           <a class="remove-event-link" href="#">Remove Event</a>
         </aside>
       </section>
-     
+
     </div>
   );
 };

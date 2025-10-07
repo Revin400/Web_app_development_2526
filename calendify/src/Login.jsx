@@ -1,7 +1,10 @@
 import "./login.css";
 import calendifylogo from "./calendifylogo.png";
-export default function LoginPage() {
+import { useNavigate } from "react-router-dom";
 
+
+const LoginPage = () => {
+  const navigate = useNavigate();
 
   return (
     <div className="body">
@@ -35,10 +38,13 @@ export default function LoginPage() {
           </div>
 
           <div className="loginbutton">
-            <input type="button" value="login" />
+            <button class="loginbutton" onClick={() => navigate("/calendar")}>Log In</button>
           </div>
         </form>
       </div>
     </div>
   );
 }
+
+
+export default LoginPage;

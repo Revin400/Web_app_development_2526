@@ -1,8 +1,11 @@
 import React from "react";
 import './WelcomeScreen.css';
 import MainLogo from './Logo_Calendify.png';
+import { useNavigate } from "react-router-dom";
 
 const WelcomeScreen = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="welcome-screen">
 
@@ -19,7 +22,7 @@ const WelcomeScreen = () => {
       </p>
 
       <div className="button">
-        <button className="button" onClick={() => alert("Get Started Clicked!")}>Log In</button>
+        <button className="button" onClick={() => navigate("/login")}>Log In</button>
       </div>  
         <footer>
 
