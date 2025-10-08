@@ -1,13 +1,13 @@
-import "./NewEventPage.css";
+import "./NewReminderPage.css";
 
-    const NewEventPage = () => {
+    const NewReminderPage = () => {
     return (
-        <div className="page">
-        <section className="form-content">
-            <form className="new-event-form">
+        <div className="form-page">
+        <section class="form-content">
+            <form className="new-reminder-form">
             <div class="upper-section">
                <a className="closebtn" href="/calendar">X</a>
-               <h4 className="neweventpill">New event</h4>
+               <h4 className="newreminderpill">New reminder</h4>
             </div>
 
             <div className="form-section-1">
@@ -69,4 +69,4 @@ import "./NewEventPage.css";
     );
     };
 
-    export default NewEventPage;
+    export default NewReminderPage;
