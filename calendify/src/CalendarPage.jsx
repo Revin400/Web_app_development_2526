@@ -2,6 +2,7 @@ import "./CalendarPage.css";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Profilepic from './Default_pfp.png';
+import checkmark from './check-img.png';
 const CalendarPage = () => {
   const [activeCard, setActiveCard] = React.useState(null);
   const [activeSegment, setActiveSegment] = React.useState("events");
@@ -30,9 +31,8 @@ const CalendarPage = () => {
               type="button"
               role="tab"
               aria-selected={activeSegment === "events"}
-              className={`seg-btn ${
-                activeSegment === "events" ? "is-active" : ""
-              }`}
+              className={`seg-btn ${activeSegment === "events" ? "is-active" : ""
+                }`}
               onClick={() => setActiveSegment("events")}
             >
               events
@@ -41,9 +41,8 @@ const CalendarPage = () => {
               type="button"
               role="tab"
               aria-selected={activeSegment === "reminders"}
-              className={`seg-btn ${
-                activeSegment === "reminders" ? "is-active" : ""
-              }`}
+              className={`seg-btn ${activeSegment === "reminders" ? "is-active" : ""
+                }`}
               onClick={() => setActiveSegment("reminders")}
             >
               reminders
@@ -54,14 +53,14 @@ const CalendarPage = () => {
             src={Profilepic}
             alt="User profile"
             className="profile-pic"
-            
+
           />
 
           <button
             className="add-event-btn"
             onClick={() => navigate(activeSegment === "reminders" ? "/new-reminder" : "/new-event")}
           >
-           
+
             {activeSegment === "reminders" && "+ Add Reminder"}
             {activeSegment === "events" && "+ Add Event"}
           </button>
@@ -71,9 +70,8 @@ const CalendarPage = () => {
             eventsDays.map(({ day, weekday }) => (
               <button
                 key={day}
-                className={`card card-btn${
-                  activeCard === day ? " is-active" : ""
-                }`} 
+                className={`card card-btn${activeCard === day ? " is-active" : ""
+                  }`}
                 onClick={() => setActiveCard(day)}
               >
                 {weekday} <br />{" "}
@@ -81,12 +79,11 @@ const CalendarPage = () => {
               </button>
             ))}
           {activeSegment === "reminders" &&
-                remindersDays.map(({ day, weekday }) => (
+            remindersDays.map(({ day, weekday }) => (
               <button
                 key={day}
-                className={`card card-btn${
-                  activeCard === day ? " is-active" : ""
-                }`} 
+                className={`card card-btn${activeCard === day ? " is-active" : ""
+                  }`}
                 onClick={() => setActiveCard(day)}
               >
                 {weekday} <br />{" "}
@@ -95,8 +92,11 @@ const CalendarPage = () => {
             ))}
         </div>
 
-        <aside className="sidebar">
-          <h2>Project Kickoff: Alpha Launch</h2>
+        <div className="sidebar">
+          <div className="sidebar-header">
+            <h2 className="top-text">Project Kickoff: Alpha Launch</h2>
+            <img src={checkmark} className="check" />
+          </div>
           <p>Conference Room 2B</p>
           <br />
           <small>
@@ -117,9 +117,9 @@ const CalendarPage = () => {
             project charter in advance.
           </p>
           <a class="remove-event-link" href="#">
-             {activeSegment === "reminders" ? "Remove Reminder" : "Remove Event"}
+            {activeSegment === "reminders" ? "Remove Reminder" : "Remove Event"}
           </a>
-        </aside>
+        </div>
       </section>
     </div>
   );
