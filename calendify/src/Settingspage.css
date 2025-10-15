@@ -1,0 +1,122 @@
+:root{
+  --bg: #022626;        /* deep teal background */
+  --seg-outline:#1c6f6d;
+  --seg-bg:#113c3a;
+  --seg-fill:#7f6f5e;   /* selected pill fill */
+  --card:#FFBB98;       /* card background */
+  --shadow: 0 5px 10px rgba(0, 0, 0, 0.685);
+  --radius: 14px;
+  --pill: 999px;
+}
+
+html,
+body{
+  margin:0;
+  font-family: 'Inter';
+  font-size: 23px;
+  }
+
+.settings-page {
+    display: flex;
+    height: 100vh;
+    padding: 80px;
+    background-color: var(--bg);
+    color: var(--card);
+    width: 80%;
+  
+}
+
+.settings-neweventpill
+{
+    background: var(--bg);
+    color: var(--card);
+    padding: 8px 20px;
+    border-radius: var(--pill);
+    font-size: 18px;
+    font-weight: bold;
+    box-shadow: var(--shadow);
+}
+
+
+.settings-upper-section {
+  margin-left: auto;
+  margin-right: auto;            
+  user-select: none;   
+  justify-content: center;
+
+
+}
+
+
+.settings-sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 50px;
+    margin-right: 10%;
+    color:var(--card);
+}
+
+.settings-sidebar a {
+    cursor: pointer;
+}
+.settings-sidebar a:hover {
+    background-color: var(--card);
+    color: var(--bg);
+    border-radius: var(--radius);
+    padding: 5px 10px;
+    box-shadow: var(--shadow);
+    transition: background-color 1s, color 0.3s
+;
+}
+
+
+.settings-block {
+  background: var(--card);
+  border-radius:var(--radius);
+  display: flex;
+  flex-direction: column;
+  min-height: 600px;
+  min-width: 700px;
+}
+
+.settings-left-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+
+}
+
+
+.settings-content-section{
+    display: flex;
+    flex-direction: row;
+}
+
+.settings-left-content{
+    margin: auto;
+    min-height: 400px;
+    min-width: 300px;
+
+}
+
+.settings-right-section{
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    min-height: 400px; 
+    background-color: var(--seg-bg);
+    margin : 10px;
+    padding : 20px; 
+    border-radius: var(--radius);
+}
+
+
+
+.settings-left-item{
+  background-color: var(--seg-bg);
+  padding: 20px;
+    margin: 10px;   
+    border-radius: var(--radius);
+}
