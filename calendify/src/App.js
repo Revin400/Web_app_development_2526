@@ -4,6 +4,7 @@ import NewEventPage from './NewEventPage';
 import Login from './Login';
 import WelcomeScreen from './WelcomeScreen';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import SettingsPage from './Settingspage';
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/new-event" element={<NewEventPage />} />
+        <Route path="/settings" element={<SettingsPage />}  />
+
       </Routes>
     </Router>
   );
