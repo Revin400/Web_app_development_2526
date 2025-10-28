@@ -1,5 +1,5 @@
 import "./AdminAttendeesList.css";
-import react from "react";
+import React, {useState} from "react";
 
 const seed = [
   { name: "Alice Johnson" },
@@ -14,7 +14,22 @@ const seed = [
 
 const Checked = [true, false, false, true, true, true, false, true];
 
+
 function AdminAttendeesList() {
+
+  const [checked, setChecked] = useState(Checked);
+
+  const toggle = (index) => {
+      const newArray = [...checked];
+
+      if (newArray[index] === true) {
+        newArray[index] = false;
+      } else {
+        newArray[index] = true;
+      }
+      setChecked(newArray);  
+
+  };
   return (
     <div className="attendeespage">
       <main className="attendeescard">
@@ -26,18 +41,23 @@ function AdminAttendeesList() {
         <ul className="attendeeslist">
           {seed.map((p, i) => (
             <li
-              key={i}
-              className={`attendee ${Checked[i] ? "checked" : "unchecked"}`}
+              key={i} 
+              //hier word de attendee checked of unchecked en dan toggled de bg
+              className={`attendee ${checked[i] ? "checked" : "unchecked"}`}
             >
               <span className="attendeesname">{p.name}</span>
 
               <label
-                className={`switch ${Checked[i] ? "on" : "off"}`}
+                // hier veranderd de pill
+                className={`switch ${checked[i] ? "on" : "off"}`}
                 aria-label={`Toggle ${p.name}`}
               >
                 <input
                   type="checkbox"
-                  checked={Checked[i]}
+                  checked={checked[i]}
+                  // de toggle functie aan en veranded de bool van de newArray
+                  onChange={() => toggle(i)}
+                  
                 />
                 <span className="track"><span className="thumb" /></span>
               </label>

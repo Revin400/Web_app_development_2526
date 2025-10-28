@@ -5,17 +5,19 @@
   --ahp-panel: #08373a; 
   --ahp-text: #e7f6f2;
   --ahp-text-muted: #e7f6f2bf;
+  --shadow: 0 5px 10px rgba(0, 0, 0, 0.685);
+  --border-outline: 2px solid rgba(255,255,255,.06);
 
   min-height: 100vh; 
   min-width: 100vw;
   color: var(--ahp-text);
   background: var(--ahp-bg);  
-  font: 500 16px/1.5 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  font: 500 16px/1.5 'Segoe UI';
 }
 
 .ahp-container {
   max-width: 940px;
-  margin: 0 auto;
+  margin: auto;
   padding: 28px 22px;
 
 
@@ -30,32 +32,34 @@
 
 .ahp-title {
   color: var(--ahp-peach);
-  font-size: clamp(26px, 3.2vw, 40px);
-  letter-spacing: .3px;
+  font-size: clamp(26px, 3vw, 40px);
+  letter-spacing: 1px;
 }
 
 .ahp-headerActions { display: flex; gap: 12px; }
 
 .ahp-btn {
+  background: var(--ahp-peach);
   border-radius: 14px;
   padding: 10px 16px;
   font-weight: 700;
   cursor: pointer;
   transition: transform 120ms, box-shadow 120ms , opacity 120ms ;
-  box-shadow: var(--ahp-shadow);
+  border : var(--border-outline);
+  
 }
 
 
 .ahp-btnDark {
   background: var(--ahp-bg);
   color: var(--ahp-peach);
-  border: 1px solid rgba(255,255,255,0.06);
+  border: var(--border-outline);
 }
 
 
 .ahp-card {
-  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)), var(--ahp-panel);
-  border: 1px solid rgba(255,255,255,.08);
+  background: linear-gradient(180deg, var(--border-outline), var(--border-outline), var(--ahp-panel));
+  border: 1px solid var(--shadow);
   border-radius: 18px;
   box-shadow: var(--ahp-shadow);
   overflow: hidden;
@@ -75,14 +79,14 @@
   padding: 16px 18px;
   color: var(--ahp-text);
   font-weight: 800;
-  background: rgba(255,255,255,.02);
-  position: sticky;
+  background: var(--shadow);
+  position: sticky;;
 }
 
 .ahp-tbody .ahp-cell {
   padding: 14px 18px;
   color: var(--ahp-text-muted);
-  border-top: 1px solid rgba(255,255,255,.06);
+  border-top: 1px solid var(--shadow);
   vertical-align: middle;
 }
 
