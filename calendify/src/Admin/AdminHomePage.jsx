@@ -23,7 +23,7 @@ return (
           <button className="ahp-btn ahp-btnDark">
             Add Event
           </button>
-          <button className="ahp-btn ahp-btnAccent">Logout</button>
+          <button className="ahp-btn">Logout</button>
         </div>
       </header>
 
@@ -32,7 +32,7 @@ return (
           <div className="ahp-tableWrap">
             <table className="ahp-table">
               <thead className="ahp-thead">
-                <tr className="ahp-row ahp-rowHead">
+                <tr className="ahp-row">
                   <th className="ahp-cell">No.</th>
                   <th className="ahp-cell">Title</th>
                   <th className="ahp-cell">Description</th>
@@ -52,12 +52,12 @@ return (
                     <td className="ahp-cell">
                       <div className="ahp-rowActions">
                         <button
-                          className="ahp-btn ahp-btnDark ahp-btnSm"
+                          className="ahp-btn ahp-btnDark"
                         >
                           Edit
                         </button>
                         <button
-                          className="ahp-btn ahp-btnAccent ahp-btnSm"
+                          className="ahp-btn"
                         >
                           Delete
                         </button>
