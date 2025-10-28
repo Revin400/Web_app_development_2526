@@ -1,6 +1,6 @@
 import "./Settingspage.css";
 import { useNavigate } from "react-router-dom";
-// import MainLogo from './Logo_Calendify.png';
+import personal_foto from './Ellipse 4.png';
 
 const SettingsPage = () => {
   // Import useNavigate from react-router-dom
@@ -17,9 +17,9 @@ const SettingsPage = () => {
       </div>
 
       <div className="settings-content">
-            {/* <div className="picture">
-            <img src={MainLogo} alt="Calendify Logo" className="logo" />
-            </div> */}
+            <div className="picture">
+            <img src={personal_foto} alt="Calendify Logo" className="logo" />
+            </div>
 
 
         <div className="settings-block">

@@ -16,6 +16,14 @@ body{
   font-size: 23px;
   }
 
+
+.picture {
+    display: flex;
+    align-items: right;
+    margin-right: 50px;
+    margin-left: 50px;
+}
+
 .settings-page {
     display: flex;
     height: 100vh;
