@@ -23,6 +23,13 @@ const CalendarPage = () => {
           <div className="segment">
             <button className="seg-btn is-active">events</button>
             <button className="seg-btn">reminders</button>
+            <button
+              className="seg-btn room-temp-btn"
+              onClick={() => navigate("/roompage")}
+              title="Temporary: open Room page"
+            >
+              rooms
+            </button>
           </div>
           <button className="add-event-btn" onClick={() => navigate("/new-event")}>+ Add Event</button>
         </div>
@@ -52,7 +59,7 @@ const CalendarPage = () => {
           <br></br>
           <h2>Notes:</h2>
           <p>Initial kickoff meeting to align teams on project scope, deliverables, and timeline. Bring laptops and review the draft project charter in advance.</p>
-          <a class="remove-event-link" href="#">Remove Event</a>
+          <a className="remove-event-link" href="#">Remove Event</a>
         </aside>
       </section>
 

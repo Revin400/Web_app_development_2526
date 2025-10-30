@@ -1,10 +1,14 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./RoomPage.css";
 
 export default function AvailableRooms() {
+  const navigate = useNavigate();
+
   return (
     <div className="modal">
       <div className="modal-header">
-        <button className="close-btn">X</button>
+        <button className="close-btn" onClick={() => navigate('/calendar')}>X</button>
         <h5 className="modal-title">Available rooms</h5>
       </div>
 
