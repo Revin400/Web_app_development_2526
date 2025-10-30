@@ -119,3 +119,12 @@ body{
     justify-content: center;
     align-items: center;
 }
+
+.input-button-field{
+  display:flex;
+  justify-content:space-between;
+  color:#444;
+  cursor:pointer;
+}
+
+

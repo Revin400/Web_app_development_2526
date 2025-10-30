@@ -160,12 +160,56 @@ body{
 
 .sidebar-header{
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.check-container{
+  position: relative;
+  display: inline-block;
+}
+
+.check-btn{
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
 }
 
 .check{
   width: 40px;
   height: 40px;
-  margin-left: 80% ;
 }
 
+.check-container:hover .check-dropdown,
+.check-container:focus-within .check-dropdown{
+  display: flex;
+  flex-direction: column;
+}
+
+.check-dropdown{
+  display: none;
+  position: absolute;
+  right: 0;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  border-radius: 8px;
+  padding: 6px 0;
+  min-width: 160px;
+
+}
+
+.check-dropdown button{
+  background: none;
+  border: 0;
+  text-align: left;
+  padding: 8px 14px;
+  width: 100%;
+  font-size: 16px;
+  color: var(--bg);
+  cursor: pointer;
+}
+
+.check-dropdown button:hover{
+  background: rgba(0,0,0,0.1);
+}
