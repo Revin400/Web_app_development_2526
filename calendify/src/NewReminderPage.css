@@ -22,7 +22,7 @@ body{
 }
 
 
-.neweventpill{
+.newreminderpill{
     margin-left: auto;
     margin-right: auto;
     background: var(--bg);
@@ -52,7 +52,7 @@ body{
 
 
 
-.new-event-form {
+.new-reminder-form {
     background: var(--card);
     padding: 35px;
     width: 700px;
@@ -89,6 +89,7 @@ body{
 
 
 .pickers{ display:flex; gap:8px; }
+
 
 .chip-input{
   background:#e6e7e9;

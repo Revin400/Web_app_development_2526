@@ -15,39 +15,41 @@ body{
   margin:0;
   font-family: 'Inter', sans-serif;
   font-size: 23px;
-  background:var(--bg);}
+  }
+
+  .profile-pic{
+    width: 80px;
+    height: 80px;
+  }
 
 .page{
   display:flex;
   flex-direction:column;
 }
 
-.topbar{
-  padding:16px 22px;
-}
 .segment{
   grid-area: segment;
   display:inline-flex;
   justify-self: start;
   gap:6px;
-  background:var(--bg);
   border-radius:var(--pill);
   padding:4px;
   box-shadow:var(--shadow);
 }
 .seg-btn{
   border:0;
-  background:var(--bg);
   color:var(--seg-fill);
   font-weight:700;
   font-size: 23px;
   padding:10px 40px;
   border-radius:var(--pill);
+  background: transparent;
   cursor:default;
 }
 .seg-btn.is-active{
-  background:var(--seg-fill);
-  color:#1f2322;
+  color:var(--bg);
+  background-color: var(--seg-fill);
+  
 }
 
 .segment-row {
@@ -78,11 +80,9 @@ body{
     "segment segment"
     "cards   sidebar";
   gap: 80px;
-  margin: 250px auto;
-  padding: auto;
+  margin: auto;
   width: 92vw;         
   max-width: 1200px;   
-  padding: 0 16px;                
 }    
 
 /* ≥1025px & ≤1439px */
@@ -99,7 +99,6 @@ body{
       "cards"
       "sidebar";
     gap: 40px;
-    margin: 80px auto;
   }
 }
 
@@ -158,3 +157,15 @@ body{
   text-decoration: underline;
   cursor: pointer;
 } 
+
+.sidebar-header{
+  display: flex;
+  flex-direction: row;
+}
+
+.check{
+  width: 40px;
+  height: 40px;
+  margin-left: 80% ;
+}
+
