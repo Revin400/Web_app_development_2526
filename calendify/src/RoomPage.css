@@ -1,0 +1,118 @@
+body {
+  background-color: #002b28;
+  font-family: Arial, sans-serif;
+}
+
+.modal {
+  background-color: #f4b393;
+  border-radius: 16px;
+  width: 600px;
+  height: 550px;
+  padding: 20px;
+  margin: 40px auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  background-color: #002b28;
+  color: #f4b393;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-title {
+  background-color: #002b28;
+  color: #f4b393;
+  padding: 8px 16px;
+  border-radius: 20px;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+  margin: 0 auto;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #002b28;
+  color: #f4b393;
+  padding: 10px 15px;
+  border-radius: 20px;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.datetime {
+  display: flex;
+  gap: 8px;
+}
+
+.datetime input {
+  border-radius: 20px;
+  border: none;
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  padding: 3px 6px;     /* kleiner dan voorheen */
+  font-size: 0.8rem;    /* tekst iets kleiner */
+  width: 90px;          /* maakt input smaller */
+  height: 28px;         /* hoogte wat kleiner */
+
+}
+
+.table-body {
+  background-color: #002b28;
+  border-radius: 20px;
+  margin-top: 20px;
+  padding: 15px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.cell {
+  background-color: #f4b393;
+  color: #002b28;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-weight: bold;
+}
+
+.available {
+  background-color: #f4b393;
+}
+
+.not-available {
+  background-color: #f4b393;
+  opacity: 0.6;
+}
+
+.confirm-btn {
+  background-color: #002b28;
+  color: #f4b393;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 20px;
+  margin-top: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+}
+.confirm-btn:hover {  background-color: #f4b393;
+  opacity: 0.6;}
