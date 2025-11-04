@@ -31,9 +31,8 @@ const CalendarPage = () => {
               type="button"
               role="tab"
               aria-selected={activeSegment === "events"}
-              className={`seg-btn ${
-                activeSegment === "events" ? "is-active" : ""
-              }`}
+              className={`seg-btn ${activeSegment === "events" ? "is-active" : ""
+                }`}
               onClick={() => setActiveSegment("events")}
             >
               events
@@ -42,16 +41,23 @@ const CalendarPage = () => {
               type="button"
               role="tab"
               aria-selected={activeSegment === "reminders"}
-              className={`seg-btn ${
-                activeSegment === "reminders" ? "is-active" : ""
-              }`}
+              className={`seg-btn ${activeSegment === "reminders" ? "is-active" : ""
+                }`}
               onClick={() => setActiveSegment("reminders")}
             >
               reminders
             </button>
           </div>
 
-          <img src={Profilepic} alt="User profile" className="profile-pic" />
+          <div className="profile-container">
+            <img src={Profilepic} alt="User profile" className="profile-pic" />
+
+            <div className="profile-dropdown">
+              <button>Profile</button>
+              <button>My Account</button>
+              <button>Settings</button>
+            </div>
+          </div>
 
           <button
             className="add-event-btn"
@@ -70,9 +76,8 @@ const CalendarPage = () => {
             eventsDays.map(({ day, weekday }) => (
               <button
                 key={day}
-                className={`card card-btn${
-                  activeCard === day ? " is-active" : ""
-                }`}
+                className={`card card-btn${activeCard === day ? " is-active" : ""
+                  }`}
                 onClick={() => setActiveCard(day)}
               >
                 {weekday} <br />{" "}
@@ -85,9 +90,8 @@ const CalendarPage = () => {
             remindersDays.map(({ day, weekday }) => (
               <button
                 key={day}
-                className={`card card-btn${
-                  activeCard === day ? " is-active" : ""
-                }`}
+                className={`card card-btn${activeCard === day ? " is-active" : ""
+                  }`}
                 onClick={() => setActiveCard(day)}
               >
                 {weekday} <br />{" "}
