@@ -17,10 +17,51 @@ body{
   font-size: 23px;
   }
 
-  .profile-pic{
-    width: 80px;
-    height: 80px;
-  }
+.profile-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  cursor: pointer;
+  object-fit: cover;
+}
+
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  border-radius: 10px;
+  min-width: 160px;
+  padding: 6px 0;
+  z-index: 30;
+}
+
+.profile-container:hover .profile-dropdown,
+.profile-container:focus-within .profile-dropdown {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-dropdown button {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 10px 16px;
+  width: 100%;
+  font-size: 16px;
+  color: var(--bg);
+  cursor: pointer;
+}
+
+.profile-dropdown button:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
 
 .page{
   display:flex;
