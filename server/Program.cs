@@ -10,8 +10,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
+// listen to :5000
+
+
+
 var app = builder.Build();
 
+
+app.Urls.Add("http://localhost:5000");
 
 app.UseHttpsRedirection();
 app.MapControllers();

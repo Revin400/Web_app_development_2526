@@ -1,0 +1,4 @@
+### Get Admins
+GET http://localhost:5000/api/Admin 
+
+###
