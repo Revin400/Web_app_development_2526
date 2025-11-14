@@ -11,13 +11,19 @@ namespace Server.Controllers;
 [Route("api/[controller]")]
 public class AuthController(IAuthService service) : ControllerBase
 {
-    [HttpPost]
-    public async Task<Employee> LoginAsync()
+    [HttpPost("login")]
+    public async Task<ActionResult<Employee>> LoginAsync([FromBody] LoginRequest req)
     {
-        string email = HttpContext.Request.Headers["email"];
-        string password = HttpContext.Request.Headers["password"];
-        return await service.LoginAsync(email, password);
+        var employee = await service.LoginAsync(req.Email, req.Password);
+
+        if (employee is null)
+            return Unauthorized("Invalid email or password.");
+
+        return Ok(employee);
     }
-
-
+}
+public class LoginRequest
+{
+    public string Email { get; set; } = "";
+    public string Password { get; set; } = "";
 }
