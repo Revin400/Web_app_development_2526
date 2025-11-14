@@ -1,0 +1,9 @@
+### Login
+GET  http://localhost:5000/api/Auth/
+
+Content-Type: application/json
+{
+    "email": "admin@calendify.local",
+    "password": "admin123"
+}
+
