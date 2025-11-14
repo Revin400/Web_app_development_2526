@@ -15,12 +15,12 @@ public class AuthController(IAuthService service) : ControllerBase
 public async Task<IActionResult> Login([FromBody] LoginRequest req)
 {
     if (string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password))
-        return BadRequest(new { message = "Vul alle velden in." });
+        return BadRequest(new { message = "Please fill in all fields" });
 
     var employee = await service.LoginAdminAsync(req.Email, req.Password);
 
     if (employee == null)
-        return Unauthorized(new { message = "Email of wachtwoord klopt niet." });
+        return Unauthorized(new { message = "Incorrect Email or Password" });
 
     return Ok(new { message = "Login successful", name = employee.Name });
 }
@@ -32,6 +32,13 @@ public async Task<IActionResult> Login([FromBody] LoginRequest req)
     {
         var (isLoggedIn, name) = service.CheckSession();
         return Ok(new { isLoggedIn, name });
+    }
+
+    [HttpPost("logout")]
+    public IActionResult Logout()
+    {
+        service.Logout();
+        return Ok(new { message = "Logout successful" });
     }
 }
 public class LoginRequest

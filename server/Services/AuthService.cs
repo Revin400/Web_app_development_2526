@@ -46,5 +46,11 @@ public class AuthService: IAuthService
 
         return (id != null, name);
     }
+
+    public void Logout()
+    {
+        _http.HttpContext!.Session.Remove("AdminId");
+        _http.HttpContext.Session.Remove("AdminName");
+    }
 }
 

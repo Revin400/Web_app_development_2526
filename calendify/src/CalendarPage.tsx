@@ -1,5 +1,5 @@
 import "./CalendarPage.css";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Profilepic from "./Default_pfp.png";
 import checkmark from "./check-img.png";
@@ -28,9 +28,29 @@ const CalendarPage: React.FC = () => {
     { day: 15, weekday: "MON" },
     { day: 28, weekday: "SUN" }
   ];
+  
+  const [error, setError] = useState<string | null>(null);
+
+  const HandleLogOut = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        navigate("/login");
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (err) {
+      console.error("Error during logout:", err);
+    }
+  };
 
   return (
     <div className="page">
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <section className="content">
         <div className="segment-row">
           <div className="segment" role="tablist" aria-label="View type">
@@ -62,6 +82,7 @@ const CalendarPage: React.FC = () => {
               <button>Profile</button>
               <button>My Account</button>
               <button>Settings</button>
+              <button onClick={HandleLogOut}>Logout</button>
             </div>
           </div>
 
