@@ -38,7 +38,7 @@ const LoginPage = () => {
           </div>
 
           <div className="loginbutton">
-            <button class="loginbutton" onClick={() => navigate("/calendar")}>Log In</button>
+            <button className="loginbutton" onClick={() => navigate("/calendar")}>Log In</button>
           </div>
         </form>
       </div>
