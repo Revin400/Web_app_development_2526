@@ -1,29 +1,30 @@
-import "./NewEventPage.css";
+import "./NewReminderPage.css";
+
 import { useNavigate } from "react-router-dom";
 
-const NewEventPage = () => {
-  const navigate = useNavigate();
 
-  return (
-    <div className="page">
+const NewReminderPage = () => {
+    const navigate = useNavigate();
+    return (
+        <div className="form-page">
       <section className="form-content">
-        <form className="new-event-form">
-          <div class="upper-section">
+        <form className="new-reminder-form">
+          <div className="upper-section">
             <a className="closebtn" href="/calendar">
               X
             </a>
-            <h4 className="neweventpill">New event</h4>
+            <h4 className="newreminderpill">New reminder</h4>
           </div>
 
           <div className="form-section-1">
-            <input class="input-field" type="text" placeholder="Title" />
+            <input className="input-field" type="text" placeholder="Title" />
             <input
-              class="input-field"
+              className="input-field"
               type="text"
               placeholder="Location or Video Call"
             />
-            <input class="input-field" type="text" placeholder="Hosted By" />
-            <input class="input-field" type="text" placeholder="Invitees" />
+            <input className="input-field" type="text" placeholder="Hosted By" />
+            <input className="input-field" type="text" placeholder="Invitees" />
             <div
               className="input-field input-button-field"
               onClick={() => navigate("/roompage")}
@@ -71,7 +72,7 @@ const NewEventPage = () => {
           </div>
           <div className="form-section-3">
             <textarea
-              class="input-field"
+              className="input-field"
               placeholder="Notes"
               rows={5}
               style={{ width: "100%" }}
@@ -84,4 +85,4 @@ const NewEventPage = () => {
   );
 };
 
-export default NewEventPage;
+export default NewReminderPage;

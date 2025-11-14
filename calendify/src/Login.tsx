@@ -69,13 +69,9 @@ const Login: React.FC = () => {
           </div>
 
           <div className="loginbutton">
-<<<<<<< Updated upstream:calendify/src/Login.jsx
-            <button class="loginbutton" onClick={() => navigate("/calendar")}>Log In</button>
-=======
             <button type="submit" className="loginbutton">
               Log In
             </button>
->>>>>>> Stashed changes:calendify/src/Login.tsx
           </div>
         </form>
       </div>

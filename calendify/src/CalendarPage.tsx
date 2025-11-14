@@ -139,7 +139,7 @@ const CalendarPage = () => {
             deliverables, and timeline. Bring laptops and review the draft
             project charter in advance.
           </p>
-          <a class="remove-event-link" href="#">
+          <a className="remove-event-link" href="#">
             {activeSegment === "reminders" ? "Remove Reminder" : "Remove Event"}
           </a>
         </div>
