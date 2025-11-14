@@ -5,5 +5,6 @@ namespace Server.Services.Interfaces;
 
 public interface IAuthService
 {
-    Task<Employee> LoginAsync(string email, string password);
+    Task<Employee> LoginAdminAsync(string email, string password);
+    (bool isLoggedIn, string? name) CheckSession();
 }

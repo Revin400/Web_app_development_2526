@@ -143,7 +143,6 @@ const CalendarPage: React.FC = () => {
             Initial kickoff meeting to align teams on project scope, deliverables,
             and timeline. Bring laptops and review the draft project charter.
           </p>
-
           <a className="remove-event-link" href="#">
             {activeSegment === "reminders" ? "Remove Reminder" : "Remove Event"}
           </a>
