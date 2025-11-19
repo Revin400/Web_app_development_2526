@@ -26,7 +26,7 @@ const Login: React.FC = () => {
 
       if (!res.ok) {
         const err = await res.json().catch(() => null);
-        setError(err?.message || "Onbekende fout");
+        setError(err?.message || "Login failed");
         return;
       }
 
@@ -34,7 +34,7 @@ const Login: React.FC = () => {
       navigate("/calendar");
     } catch (err) {
       console.error(err);
-      setError("Kan geen verbinding maken met de server.");
+      setError("No server response");
     }
   };
 
