@@ -10,5 +10,4 @@ public class Employee
     public string Role { get; set; }
 
     public string Password { get; set; }
-    public Admin? Admin { get; set; }
 }

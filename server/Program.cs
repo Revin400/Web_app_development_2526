@@ -30,11 +30,17 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.EnsureCreated();
+}
 
 app.Urls.Add("http://localhost:5000");
 
 app.UseCors("AllowFrontend");
 app.UseSession();
 app.MapControllers();
+
 
 app.Run();

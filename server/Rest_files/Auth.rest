@@ -9,3 +9,16 @@ Content-Type: application/json
 
 ### Check Session
 GET http://localhost:5000/api/Auth/session
+
+### Register
+POST http://localhost:5000/api/Auth/Register
+Content-Type: application/json
+
+{
+  "name": "New User",
+  "email": "test@test.com",
+  "password": "test123"
+}
+
+### Logout
+POST http://localhost:5000/api/Auth/logout

@@ -1,8 +1,24 @@
 import "./NewEventPage.css";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import {useSession} from "./hooks/useSession";
 
 const NewEventPage = () => {
   const navigate = useNavigate();
+
+
+  const {role, loading, isLoggedIn} = useSession();
+  
+  useEffect(() => {
+    if (!loading && !isLoggedIn) {
+      navigate("/login");
+    }
+
+    if(role !== "Admin")
+    {
+      navigate("/calendar");
+    }
+  } , [isLoggedIn, navigate]);
 
   return (
     <div className="page">

@@ -254,3 +254,14 @@ body{
 .check-dropdown button:hover{
   background: rgba(0,0,0,0.1);
 }
+.loading-screen {
+  display: flex;
+  justify-content: center;  
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;    
+  align-items: center;       
+  gap: 15px;                 
+}
