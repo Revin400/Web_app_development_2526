@@ -23,11 +23,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Admin>()
             .HasKey(a => a.AdminId);
 
-        modelBuilder.Entity<Admin>()
-            .HasOne(a => a.User)
-            .WithOne(e => e.Admin)
-            .HasForeignKey<Admin>(a => a.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+
 
         modelBuilder.Entity<Employee>().HasData(new Employee
         {

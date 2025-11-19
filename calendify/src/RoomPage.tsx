@@ -1,9 +1,24 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./RoomPage.css";
+import { useEffect } from "react";
+import {useSession} from "./hooks/useSession";
 
 export default function AvailableRooms() {
   const navigate = useNavigate();
+    const {role, loading, isLoggedIn} = useSession();
+    
+    useEffect(() => {
+      if (!loading && !isLoggedIn) {
+        navigate("/login");
+      }
+  
+      if(role !== "Admin")
+      {
+        navigate("/calendar");
+      }
+    } , [isLoggedIn, navigate]);
+  
 
   return (
     <div className="modal">

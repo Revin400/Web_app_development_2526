@@ -1,56 +1,55 @@
 import "./CalendarPage.css";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import calendifylogo from "./calendifylogo.png";
 import Profilepic from "./Default_pfp.png";
 import checkmark from "./check-img.png";
+import {useSession} from "./hooks/useSession";
 
-// Type for day entries
-type DayInfo = {
-  day: number;
-  weekday: string;
-};
 
-const CalendarPage: React.FC = () => {
-  const [activeCard, setActiveCard] = React.useState<number | null>(null);
-  const [activeSegment, setActiveSegment] = React.useState<"events" | "reminders">("events");
+const CalendarPage = () => {
+  const [activeCard, setActiveCard] = React.useState(null);
+  const [activeSegment, setActiveSegment] = React.useState("events");
   const navigate = useNavigate();
+  const {role, loading, isLoggedIn , name} = useSession();
+  
+  useEffect(() => {
+    if (!loading && !isLoggedIn) {
+      navigate("/login");
+    }
+  } , [isLoggedIn, navigate]);
 
-  const eventsDays: DayInfo[] = [
+  const eventsDays = [
     { day: 1, weekday: "MON" },
     { day: 7, weekday: "SUN" },
     { day: 24, weekday: "FRI" },
-    { day: 25, weekday: "SAT" }
+    { day: 25, weekday: "SAT" },
   ];
-
-  const remindersDays: DayInfo[] = [
+  
+  const remindersDays = [
     { day: 3, weekday: "WED" },
     { day: 10, weekday: "WED" },
     { day: 15, weekday: "MON" },
-    { day: 28, weekday: "SUN" }
+    { day: 28, weekday: "SUN" },
   ];
   
-  const [error, setError] = useState<string | null>(null);
+if (loading) {
+  return (
+    <div className="loading-screen">
+      <div className="logo-container">
+        <img src={calendifylogo} alt="Calendify Logo" className="logo-image" />
+        <span className="logo-text">Calendify</span>
+        <div className="loading-text">
+          Welcome {name}! Please hang tight while we load your information…
+        </div>
+      </div>
+    </div>
+  );
+}
 
-  const HandleLogOut = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (res.ok) {
-        navigate("/login");
-      } else {
-        console.error("Logout failed");
-      }
-    } catch (err) {
-      console.error("Error during logout:", err);
-    }
-  };
 
   return (
     <div className="page">
-      {error && <p style={{ color: "red" }}>{error}</p>}
       <section className="content">
         <div className="segment-row">
           <div className="segment" role="tablist" aria-label="View type">
@@ -58,17 +57,18 @@ const CalendarPage: React.FC = () => {
               type="button"
               role="tab"
               aria-selected={activeSegment === "events"}
-              className={`seg-btn ${activeSegment === "events" ? "is-active" : ""}`}
+              className={`seg-btn ${activeSegment === "events" ? "is-active" : ""
+                }`}
               onClick={() => setActiveSegment("events")}
             >
               events
             </button>
-
             <button
               type="button"
               role="tab"
               aria-selected={activeSegment === "reminders"}
-              className={`seg-btn ${activeSegment === "reminders" ? "is-active" : ""}`}
+              className={`seg-btn ${activeSegment === "reminders" ? "is-active" : ""
+                }`}
               onClick={() => setActiveSegment("reminders")}
             >
               reminders
@@ -81,11 +81,18 @@ const CalendarPage: React.FC = () => {
             <div className="profile-dropdown">
               <button>Profile</button>
               <button>My Account</button>
-              <button>Settings</button>
-              <button onClick={HandleLogOut}>Logout</button>
+              <button onClick={() => navigate("/settings")}>Settings</button>
+              <button onClick={() => {
+                fetch("http://localhost:5000/api/auth/logout", {
+                  method: "POST",
+                  credentials: "include",
+                }).then(() => {
+                  navigate("/login");
+                });
+              }}>Logout</button>
             </div>
           </div>
-
+          {role === "Admin" && (
           <button
             className="add-event-btn"
             onClick={() =>
@@ -97,30 +104,35 @@ const CalendarPage: React.FC = () => {
             {activeSegment === "reminders" && "+ Add Reminder"}
             {activeSegment === "events" && "+ Add Event"}
           </button>
-        </div>
-
+        )}
+        </div> 
         <div className="cards">
           {activeSegment === "events" &&
             eventsDays.map(({ day, weekday }) => (
               <button
                 key={day}
-                className={`card card-btn${activeCard === day ? " is-active" : ""}`}
+                className={`card card-btn${activeCard === day ? " is-active" : ""
+                  }`}
                 onClick={() => setActiveCard(day)}
               >
-                {weekday} <br />
-                <span style={{ fontSize: "2em", fontWeight: "bold" }}>{day}</span>
+                {weekday} <br />{" "}
+                <span style={{ fontSize: "2em", fontWeight: "bold" }}>
+                  {day}
+                </span>
               </button>
             ))}
-
           {activeSegment === "reminders" &&
             remindersDays.map(({ day, weekday }) => (
               <button
                 key={day}
-                className={`card card-btn${activeCard === day ? " is-active" : ""}`}
-                onClick={() => setActiveCard(day)} 
+                className={`card card-btn${activeCard === day ? " is-active" : ""
+                  }`}
+                onClick={() => setActiveCard(day)}
               >
-                {weekday} <br />
-                <span style={{ fontSize: "2em", fontWeight: "bold" }}>{day}</span>
+                {weekday} <br />{" "}
+                <span style={{ fontSize: "2em", fontWeight: "bold" }}>
+                  {day}
+                </span>
               </button>
             ))}
         </div>
@@ -128,12 +140,14 @@ const CalendarPage: React.FC = () => {
         <div className="sidebar">
           <div className="sidebar-header">
             <h2 className="top-text">Project Kickoff: Alpha Launch</h2>
-
             <div className="check-container">
-              <button className="check-btn" aria-haspopup="menu" aria-label="Attendance">
+              <button
+                className="check-btn"
+                aria-haspopup="menu"
+                aria-label="Attendance"
+              >
                 <img src={checkmark} className="check" alt="" />
               </button>
-
               <div className="check-dropdown" role="menu">
                 <button role="menuitem">Attending</button>
                 <button role="menuitem">Maybe</button>
@@ -141,32 +155,30 @@ const CalendarPage: React.FC = () => {
               </div>
             </div>
           </div>
-
           <p>Conference Room 2B</p>
           <br />
-
           <small>
             Tuesday, September 9, 2025
             <br />
             10:00 am to 11:30 am
           </small>
-
           <br />
-
           <p>
-            <strong>Hosted by:</strong> Sarah Johnson <br /> (Product Manager)
+            <h4 style={{ display: "inline", margin: 0 }}>Hosted by:</h4> Sarah
+            Johnson <br></br>(Product Manager)
           </p>
-
-          <br />
-
+          <br></br>
           <h2>Notes:</h2>
           <p>
-            Initial kickoff meeting to align teams on project scope, deliverables,
-            and timeline. Bring laptops and review the draft project charter.
+            Initial kickoff meeting to align teams on project scope,
+            deliverables, and timeline. Bring laptops and review the draft
+            project charter in advance.
           </p>
+          {role === "Admin" && (
           <a className="remove-event-link" href="#">
             {activeSegment === "reminders" ? "Remove Reminder" : "Remove Event"}
           </a>
+          )}
         </div>
       </section>
     </div>

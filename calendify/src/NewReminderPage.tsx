@@ -1,12 +1,26 @@
 import "./NewReminderPage.css";
 
 import { useNavigate } from "react-router-dom";
-
+import { useEffect } from "react";
+import { useSession } from "./hooks/useSession";
 
 const NewReminderPage = () => {
-    const navigate = useNavigate();
-    return (
-        <div className="form-page">
+  const navigate = useNavigate();
+
+  const { role, loading, isLoggedIn } = useSession();
+
+  useEffect(() => {
+    if (!loading && !isLoggedIn) {
+      navigate("/login");
+    }
+
+    if (role !== "Admin") {
+      navigate("/calendar");
+    }
+  }, [isLoggedIn, navigate]);
+
+  return (
+    <div className="form-page">
       <section className="form-content">
         <form className="new-reminder-form">
           <div className="upper-section">
@@ -23,7 +37,11 @@ const NewReminderPage = () => {
               type="text"
               placeholder="Location or Video Call"
             />
-            <input className="input-field" type="text" placeholder="Hosted By" />
+            <input
+              className="input-field"
+              type="text"
+              placeholder="Hosted By"
+            />
             <input className="input-field" type="text" placeholder="Invitees" />
             <div
               className="input-field input-button-field"

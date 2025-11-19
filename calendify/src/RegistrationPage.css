@@ -1,0 +1,92 @@
+:root{
+  --bg: #162C27;      
+  --seg-outline:#1c6f6d;
+  --seg-bg:#113c3a;
+  --seg-fill:#7f6f5e;  
+  --card:#FFBB98;      
+  --shadow: 0 5px 10px rgba(0, 0, 0, 0.685);
+  --radius: 14px;
+  --pill: 999px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  color: white;
+}
+
+
+
+.Registration-form-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.Registration-form {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  color: var(--bg);
+  padding: 35px 45px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.Registration-form h2 {
+  text-align: center;
+  margin-bottom: 1px;
+}
+
+.input-field {
+  padding: 12px 16px;
+  border-radius: var(--pill);
+  font-size: 18px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.input-field:focus {
+  outline: 2px solid var(--seg-fill);
+}
+
+.registration-button {
+    border-radius: var(--pill);
+    background: var(--seg-fill);
+    box-shadow: var(--shadow);
+    color: var(--bg);
+    padding: 12px 20px;
+    border: none;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.registration-button:hover {
+  background: var(--bg);
+  color: var(--card);
+}
+
+.redirect-text {
+  text-align: center;
+  color: var(--bg);
+  font-size: 16px;
+}
+
+.redirect-text:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.error-text {
+  color: red;
+  text-align: center;
+  font-weight: bold;
+}
