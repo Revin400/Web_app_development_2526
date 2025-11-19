@@ -1,33 +1,76 @@
-
-.welcome-screen { 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center; 
-    height: 100vh; 
-    background-color: #022626; 
-    color: #FFBB98;
-    font-family: 'comic sans ms', sans-serif;
+:root {
+  --bg: #022626;
+  --accent: #FFBB98;
+  --accent-hover: #e8a986;
+  --text-light: #ffffff;
+  --radius: 18px;
+  --shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
 }
 
-.button {
-    background-color: #FFBB98; 
-    color: #022626; 
-    border: none; 
-    padding: 10px 20px; 
-    font-size: 16px; 
-    cursor: pointer; 
-    border-radius: 10px; 
-    margin-top: 10px; 
+.welcome-screen {
+    background: var(--bg);  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-light);
+    font-family: "Inter", sans-serif;
+    text-align: center;
 }
 
-.button:hover {
-    background-color: #FFA07A; 
+.welcome-title {
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 10px;
 }
 
-.MainLogo {
-    width: 150px; 
-    height: 150px;
-    object-fit: contain;
-    margin-bottom: 20px; 
-}   
+.welcome-subtitle {
+    font-size: 18px;
+    max-width: 380px;
+    opacity: 0.9;
+    margin-bottom: 40px;
+}
+
+.welcome-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    max-width: 260px;
+}
+
+.ws-btn {
+    padding: 14px 20px;
+    width: 100%;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: var(--shadow);
+    transition: 0.2s ease;
+}
+
+.ws-btn:hover {
+    background: var(--accent-hover);
+}
+
+.ws-btn.secondary {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+}
+
+.ws-btn.secondary:hover {
+    background: rgba(255, 187, 152, 0.15);
+}
+
+.welcome-footer {
+    position: absolute;
+    bottom: 20px;
+    font-size: 14px;
+    opacity: 0.7;
+}

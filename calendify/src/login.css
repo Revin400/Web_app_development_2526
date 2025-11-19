@@ -78,3 +78,9 @@ body {
     font-weight: bold;
     color: #FFBB98;                 /* matching your color theme */
 }
+
+
+.redirect-text:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}

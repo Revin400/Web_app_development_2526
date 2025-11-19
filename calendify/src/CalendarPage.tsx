@@ -17,7 +17,7 @@ const CalendarPage = () => {
     if (!loading && !isLoggedIn) {
       navigate("/login");
     }
-  } , [isLoggedIn, navigate]);
+  } , [isLoggedIn, loading, navigate]);
 
   const eventsDays = [
     { day: 1, weekday: "MON" },
@@ -83,11 +83,11 @@ if (loading) {
               <button>My Account</button>
               <button onClick={() => navigate("/settings")}>Settings</button>
               <button onClick={() => {
-                fetch("http://localhost:5000/api/auth/logout", {
+                fetch("http://localhost:5000/api/Auth/logout", {
                   method: "POST",
                   credentials: "include",
                 }).then(() => {
-                  navigate("/login");
+                  navigate("/");
                 });
               }}>Logout</button>
             </div>

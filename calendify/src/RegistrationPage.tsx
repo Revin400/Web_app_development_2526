@@ -82,7 +82,7 @@ const RegistrationPage: React.FC = () => {
 
           <p
             className="redirect-text"
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/login")}
             style={{ cursor: "pointer" }}
           >
             Already have an account? Log in here.

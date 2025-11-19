@@ -72,7 +72,15 @@ const Login: React.FC = () => {
             <button type="submit" className="loginbutton">
               Log In
             </button>
+
           </div>
+            <p
+            className="redirect-text"
+            onClick={() => navigate("/registration")}
+            style={{ cursor: "pointer" }}
+          >
+            Dont have an account? Register here.
+          </p>
         </form>
       </div>
     </div>

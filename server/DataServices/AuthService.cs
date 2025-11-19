@@ -72,12 +72,12 @@ public async Task<Employee?> LoginAsync(string email, string password)
         _http.HttpContext.Session.SetString("Role", "Employee");
     }
 
-    public (bool isLoggedIn, string? name) CheckSession()
+    public (bool isLoggedIn, string? name, string? role) CheckSession()
     {
-        var id = _http.HttpContext!.Session.GetInt32("AdminId");
-        var name = _http.HttpContext.Session.GetString("AdminName");
-
-        return (id != null, name);
+        var id = _http.HttpContext!.Session.GetInt32("UserId");
+        var name = _http.HttpContext.Session.GetString("UserName");
+        var role = _http.HttpContext.Session.GetString("Role");
+        return (id != null, name, role);
     }
 }
 

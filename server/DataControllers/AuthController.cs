@@ -30,9 +30,27 @@ public class AuthController(IAuthService service) : ControllerBase
     [HttpGet("session")]
     public IActionResult CheckSession()
     {
-        var (isLoggedIn, name) = service.CheckSession();
-        return Ok(new { isLoggedIn, name });
+        var role = HttpContext.Session.GetString("Role");
+        var name = HttpContext.Session.GetString("Name");
+
+        if (string.IsNullOrEmpty(role))
+        {
+            return Ok(new
+            {
+                isLoggedIn = false,
+                name = (string?)null,
+                role = (string?)null
+            });
+        }
+
+        return Ok(new
+        {
+            isLoggedIn = true,
+            name = name,
+            role = role
+        });
     }
+
 
     [HttpPost("Register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest req)
@@ -47,7 +65,7 @@ public class AuthController(IAuthService service) : ControllerBase
 
         try
         {
-            await service .RegisterAsync(req.Name, req.Email, req.Password);
+            await service.RegisterAsync(req.Name, req.Email, req.Password);
             return Ok(new { message = "Registration successful" });
         }
         catch (Exception ex)
@@ -62,7 +80,7 @@ public class AuthController(IAuthService service) : ControllerBase
         HttpContext.Session.Clear();
         return Ok(new { message = "Logout successful" });
     }
-       
+
 }
 public class LoginRequest
 {
