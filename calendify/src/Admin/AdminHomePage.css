@@ -97,3 +97,61 @@
   color: var(--ahp-text-muted);
   padding: 28px;
 }
+
+
+.ahp-modalBackdrop {
+  position: fixed;
+  inset: 0;                
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.ahp-modal {
+  background: #022626;
+  border-radius: 18px;
+  padding: 24px;
+  width: 400px;
+  max-width: 90%;
+  border: 1px solid var(--shadow);
+  box-shadow: 0 18px 40px var(--shadow);
+}
+
+.ahp-modalTitle {
+  margin: 0 0 12px 0;
+  color: #ffbc99;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.ahp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ahp-formField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #ffbc99;
+  font-size: 14px;
+}
+
+.ahp-formField input,
+.ahp-formField textarea {
+  background: #08373a;
+  color: #e7f6f2;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px;
+}
+
+.ahp-formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
