@@ -92,6 +92,7 @@ const AdminHomePage: FC = () => {
   const openEditForm = (ev: EventItem) => {
     setEditingId(ev.id);
     setFormValues({
+      id: ev.id,
       title: ev.title,
       description: ev.description,
       eventDate: formatDateForDisplay(ev.eventDate),

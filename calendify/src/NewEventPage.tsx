@@ -10,15 +10,19 @@ const NewEventPage = () => {
   const {role, loading, isLoggedIn} = useSession();
   
   useEffect(() => {
-    if (!loading && !isLoggedIn) {
-      navigate("/login");
-    }
+  if (loading) return; 
 
-    if(role !== "Admin")
-    {
-      navigate("/calendar");
-    }
-  } , [isLoggedIn, navigate]);
+  if (!isLoggedIn) {
+    navigate("/login");
+    return;
+  }
+
+  if (role !== "Admin") {
+    navigate("/calendar");
+  }
+
+}, [loading, isLoggedIn, role, navigate]);
+
 
   return (
     <div className="page">

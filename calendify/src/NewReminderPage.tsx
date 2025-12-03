@@ -10,15 +10,17 @@ const NewReminderPage = () => {
   const { role, loading, isLoggedIn } = useSession();
 
   useEffect(() => {
-    if (!loading && !isLoggedIn) {
+    if (loading) return;
+
+    if (!isLoggedIn) {
       navigate("/login");
+      return;
     }
 
     if (role !== "Admin") {
       navigate("/calendar");
     }
-  }, [isLoggedIn, navigate]);
-
+  }, [loading, isLoggedIn, role, navigate]);
   return (
     <div className="form-page">
       <section className="form-content">
