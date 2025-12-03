@@ -1,0 +1,27 @@
+### Get all
+GET http://localhost:5000/api/events
+
+### Create
+POST http://localhost:5000/api/events
+Content-Type: application/json
+
+{
+  "title": "Simple Event",
+  "description": "Test event",
+  "eventDate": "2025-02-10T10:00:00",
+  "createdBy": "Admin"
+}
+
+### Update
+PUT http://localhost:5000/api/events/1
+Content-Type: application/json
+
+{
+  "title": "Updated Event",
+  "description": "Updated description",
+  "eventDate": "2025-02-12T12:00:00",
+  "createdBy": "Admin"
+}
+
+### Delete
+DELETE http://localhost:5000/api/events/1
