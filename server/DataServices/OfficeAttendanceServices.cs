@@ -13,26 +13,26 @@ public class OfficeAttendanceService : IOfficeAttendanceService
 
     public async Task<IEnumerable<OfficeAttendance>> GetAllAsync()
     {
-        return await _context.Officeattendances.ToListAsync();
+        return await _context.OfficeAttendance.ToListAsync();
     }
 
     public async Task<OfficeAttendance?> GetByIdAsync(int id)
     {
-        return await _context.Officeattendances
-            .FirstOrDefaultAsync(x => x.Attendance_Id == id);
+        return await _context.OfficeAttendance
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<OfficeAttendance> CreateAsync(OfficeAttendance attendance)
     {
-        _context.Officeattendances.Add(attendance);
+        _context.OfficeAttendance.Add(attendance);
         await _context.SaveChangesAsync();
         return attendance;
     }
 
     public async Task<bool> UpdateAsync(OfficeAttendance attendance)
     {
-        var existing = await _context.Officeattendances
-            .FirstOrDefaultAsync(x => x.Attendance_Id == attendance.Attendance_Id);
+        var existing = await _context.OfficeAttendance
+            .FirstOrDefaultAsync(x => x.Id == attendance.Id);
 
         if (existing == null)
             return false;
@@ -47,13 +47,13 @@ public class OfficeAttendanceService : IOfficeAttendanceService
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var existing = await _context.Officeattendances
-            .FirstOrDefaultAsync(x => x.Attendance_Id == id);
+        var existing = await _context.OfficeAttendance
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (existing == null)
             return false;
 
-        _context.Officeattendances.Remove(existing);
+        _context.OfficeAttendance.Remove(existing);
         await _context.SaveChangesAsync();
         return true;
     }

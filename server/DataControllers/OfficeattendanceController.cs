@@ -40,13 +40,13 @@ namespace Server.Controllers
                 return BadRequest(ModelState);
 
             var result = await _service.CreateAsync(attendance);
-            return CreatedAtAction(nameof(GetById), new { id = result.Attendance_Id }, result);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] OfficeAttendance attendance)
         {
-            if (id != attendance.Attendance_Id)
+            if (id != attendance.Id)
                 return BadRequest("ID mismatch");
 
             var success = await _service.UpdateAsync(attendance);

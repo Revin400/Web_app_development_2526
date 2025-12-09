@@ -12,7 +12,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Admin> Admins => Set<Admin>();
     public DbSet<Event> Events { get; set; }
     
-    public DbSet<OfficeAttendance> Officeattendances {get; set;}
+    public DbSet<OfficeAttendance> OfficeAttendance {get; set;}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
