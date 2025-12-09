@@ -1,6 +1,9 @@
 ### Get all attendance records
 GET http://localhost:5000/api/OfficeAttendance
 
+### Get attendance record by ID
+GET http://localhost:5000/api/OfficeAttendance/2
+
 
 ### Create a new attendance entry
 POST http://localhost:5000/api/OfficeAttendance
