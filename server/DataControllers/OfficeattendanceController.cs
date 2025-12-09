@@ -54,7 +54,7 @@ namespace Server.Controllers
             if (!success)
                 return NotFound();
 
-            return NoContent();
+            return Ok(success);
         }
 
         [HttpDelete("{id}")]
@@ -65,7 +65,7 @@ namespace Server.Controllers
             if (!success)
                 return NotFound();
 
-            return NoContent();
+            return Ok(success);
         }
     }
 }
