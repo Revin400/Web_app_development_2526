@@ -11,6 +11,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Employee> Employees => Set<Employee>();
     public DbSet<Admin> Admins => Set<Admin>();
     public DbSet<Event> Events { get; set; }
+    
+    public DbSet<OfficeAttendance> Officeattendances {get; set;}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

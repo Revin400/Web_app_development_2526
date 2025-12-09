@@ -1,0 +1,29 @@
+### Get all attendance records
+GET http://localhost:5000/api/OfficeAttendance
+
+
+### Create a new attendance entry
+POST http://localhost:5000/api/OfficeAttendance
+Content-Type: application/json
+
+{
+  "user_id": 14,
+  "date": "2025-02-10T09:00:00",
+  "status": "Present"
+}
+
+
+### Update an attendance record
+PUT http://localhost:5000/api/OfficeAttendance/1
+Content-Type: application/json
+
+{
+  "attendance_Id": 1,
+  "user_id": 14,
+  "date": "2025-02-10T09:30:00",
+  "status": "Late"
+}
+
+
+### Delete an attendance record
+DELETE http://localhost:5000/api/OfficeAttendance/1
