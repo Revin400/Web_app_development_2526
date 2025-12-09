@@ -1,6 +1,12 @@
 ### Get all
 GET http://localhost:5000/api/events
 
+### Get by ID
+GET http://localhost:5000/api/events/3
+
+### Get by ID not found
+GET http://localhost:5000/api/events/2
+
 ### Create
 POST http://localhost:5000/api/events
 Content-Type: application/json
@@ -11,6 +17,14 @@ Content-Type: application/json
   "eventDate": "2025-02-10T10:00:00",
   "createdBy": "Admin"
 }
+
+### Create missing fields
+POST http://localhost:5000/api/events
+Content-Type: application/json
+
+{
+  "title": "Incomplete Event"
+} 
 
 ### Update
 PUT http://localhost:5000/api/events/1
@@ -23,5 +37,19 @@ Content-Type: application/json
   "createdBy": "Admin"
 }
 
+### Update not correct missing CreatedBy
+PUT http://localhost:5000/api/events/3
+Content-Type: application/json
+
+{
+  "title": "Non-existent Event",
+  "description": "This event does not exist",
+  "eventDate": "2025-02-15T15:00:00"
+}
+
 ### Delete
 DELETE http://localhost:5000/api/events/1
+
+
+### Delete not found
+DELETE http://localhost:5000/api/events/999

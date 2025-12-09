@@ -29,8 +29,23 @@ const Login: React.FC = () => {
         setError(err?.message || "Login failed");
         return;
       }
-
       const data = await res.json();
+
+      try {
+        const isAdminRes = await fetch("http://localhost:5000/api/Auth/session", {
+          method: "GET",
+          credentials: "include",
+        });
+        const isAdminData = await isAdminRes.json();
+        if (isAdminData.role === "Admin") {
+          navigate("/adminhomepage");
+          return;
+        }
+      }
+      catch (err) {
+              console.error(err);
+      setError("No server response");}
+
       navigate("/calendar");
     } catch (err) {
       console.error(err);

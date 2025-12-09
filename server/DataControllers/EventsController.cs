@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Server.Models;
 using Server.Services.Interfaces;
+using Server.Filters;
 
 namespace Server.Controllers
 {
@@ -30,8 +31,9 @@ namespace Server.Controllers
 
             return Ok(ev);
         }
-
+        
         [HttpPost]
+        [AdminOnly]
         public async Task<ActionResult<Event>> Create(Event newEvent)
         {
             var created = await _service.CreateEventAsync(newEvent);
@@ -39,6 +41,7 @@ namespace Server.Controllers
         }
 
         [HttpPut("{id}")]
+        [AdminOnly]
         public async Task<ActionResult<Event>> Update(int id, Event updatedEvent)
         {
             updatedEvent.Id = id;
@@ -51,6 +54,7 @@ namespace Server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AdminOnly]
         public async Task<IActionResult> Delete(int id)
         {
             var success = await _service.DeleteEventAsync(id);
