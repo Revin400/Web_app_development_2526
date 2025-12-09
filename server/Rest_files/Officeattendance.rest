@@ -21,7 +21,7 @@ PUT http://localhost:5000/api/OfficeAttendance/1
 Content-Type: application/json
 
 {
-  "attendance_Id": 1,
+  "id": 1,
   "user_id": 14,
   "date": "2025-02-10T09:30:00",
   "status": "Late"
