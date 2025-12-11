@@ -4,49 +4,83 @@ import { useNavigate } from "react-router-dom";
 import calendifylogo from "./calendifylogo.png";
 import Profilepic from "./Default_pfp.png";
 import checkmark from "./check-img.png";
-import {useSession} from "./hooks/useSession";
-
+import { useSession } from "./hooks/useSession";
 
 const CalendarPage = () => {
   const [activeCard, setActiveCard] = React.useState(null);
   const [activeSegment, setActiveSegment] = React.useState("events");
   const navigate = useNavigate();
-  const {role, loading, isLoggedIn , name} = useSession();
-  
+  const { role, loading, isLoggedIn, name } = useSession();
+
+  const [events, setEvents] = React.useState<EventType[]>([]);
+  const [selectedEvent, setSelectedEvent] = React.useState<EventType | null>(
+    null
+  );
+
+  type EventType = {
+    id: number;
+    title: string;
+    description: string;
+    eventDate: string;
+    createdBy: string;
+  };
+
   useEffect(() => {
     if (!loading && !isLoggedIn) {
       navigate("/login");
     }
-  } , [isLoggedIn, loading, navigate]);
+  }, [isLoggedIn, loading, navigate]);
 
-  const eventsDays = [
-    { day: 1, weekday: "MON" },
-    { day: 7, weekday: "SUN" },
-    { day: 24, weekday: "FRI" },
-    { day: 25, weekday: "SAT" },
-  ];
-  
+  useEffect(() => {
+    fetch("http://localhost:5000/api/events", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setEvents(data);
+      })
+      .catch(() => console.log("Failed to load events"));
+  }, []);
+
+  const eventsDays = events.map((e) => {
+    const date = new Date(e.eventDate);
+    const day = date.getDate();
+    const weekday = date
+      .toLocaleDateString("en-US", { weekday: "short" })
+      .toUpperCase();
+
+    return {
+      id: e.id,
+      day,
+      weekday,
+      fullEvent: e,
+    };
+  });
+
   const remindersDays = [
     { day: 3, weekday: "WED" },
     { day: 10, weekday: "WED" },
     { day: 15, weekday: "MON" },
     { day: 28, weekday: "SUN" },
   ];
-  
-if (loading) {
-  return (
-    <div className="loading-screen">
-      <div className="logo-container">
-        <img src={calendifylogo} alt="Calendify Logo" className="logo-image" />
-        <span className="logo-text">Calendify</span>
-        <div className="loading-text">
-          Welcome {name}! Please hang tight while we load your information…
+
+  if (loading) {
+    return (
+      <div className="loading-screen">
+        <div className="logo-container">
+          <img
+            src={calendifylogo}
+            alt="Calendify Logo"
+            className="logo-image"
+          />
+          <span className="logo-text">Calendify</span>
+          <div className="loading-text">
+            Welcome {name}! Please hang tight while we load your information…
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
-
+    );
+  }
 
   return (
     <div className="page">
@@ -57,8 +91,9 @@ if (loading) {
               type="button"
               role="tab"
               aria-selected={activeSegment === "events"}
-              className={`seg-btn ${activeSegment === "events" ? "is-active" : ""
-                }`}
+              className={`seg-btn ${
+                activeSegment === "events" ? "is-active" : ""
+              }`}
               onClick={() => setActiveSegment("events")}
             >
               events
@@ -67,8 +102,9 @@ if (loading) {
               type="button"
               role="tab"
               aria-selected={activeSegment === "reminders"}
-              className={`seg-btn ${activeSegment === "reminders" ? "is-active" : ""
-                }`}
+              className={`seg-btn ${
+                activeSegment === "reminders" ? "is-active" : ""
+              }`}
               onClick={() => setActiveSegment("reminders")}
             >
               reminders
@@ -82,40 +118,45 @@ if (loading) {
               <button>Profile</button>
               <button>My Account</button>
               <button onClick={() => navigate("/settings")}>Settings</button>
-              <button onClick={() => {
-                fetch("http://localhost:5000/api/Auth/logout", {
-                  method: "POST",
-                  credentials: "include",
-                }).then(() => {
-                  navigate("/");
-                });
-              }}>Logout</button>
+              <button
+                onClick={() => {
+                  fetch("http://localhost:5000/api/Auth/logout", {
+                    method: "POST",
+                    credentials: "include",
+                  }).then(() => {
+                    navigate("/");
+                  });
+                }}
+              >
+                Logout
+              </button>
             </div>
           </div>
           {role === "Admin" && (
-          <button
-            className="add-event-btn"
-            onClick={() =>
-              navigate(
-                activeSegment === "reminders" ? "/new-reminder" : "/new-event"
-              )
-            }
-          >
-            {activeSegment === "reminders" && "+ Add Reminder"}
-            {activeSegment === "events" && "+ Add Event"}
-          </button>
-        )}
-        </div> 
+            <button
+              className="add-event-btn"
+              onClick={() =>
+                navigate(
+                  activeSegment === "reminders" ? "/new-reminder" : "/new-event"
+                )
+              }
+            >
+              {activeSegment === "reminders" && "+ Add Reminder"}
+              {activeSegment === "events" && "+ Add Event"}
+            </button>
+          )}
+        </div>
         <div className="cards">
           {activeSegment === "events" &&
-            eventsDays.map(({ day, weekday }) => (
+            eventsDays.map(({ id, day, weekday, fullEvent }) => (
               <button
-                key={day}
-                className={`card card-btn${activeCard === day ? " is-active" : ""
-                  }`}
-                onClick={() => setActiveCard(day)}
+                key={id}
+                className={`card card-btn${
+                  selectedEvent?.id === id ? " is-active" : ""
+                }`}
+                onClick={() => setSelectedEvent(fullEvent)}
               >
-                {weekday} <br />{" "}
+                {weekday} <br />
                 <span style={{ fontSize: "2em", fontWeight: "bold" }}>
                   {day}
                 </span>
@@ -125,8 +166,9 @@ if (loading) {
             remindersDays.map(({ day, weekday }) => (
               <button
                 key={day}
-                className={`card card-btn${activeCard === day ? " is-active" : ""
-                  }`}
+                className={`card card-btn${
+                  activeCard === day ? " is-active" : ""
+                }`}
                 onClick={() => setActiveCard(day)}
               >
                 {weekday} <br />{" "}
@@ -137,49 +179,39 @@ if (loading) {
             ))}
         </div>
 
+          {selectedEvent ? (
         <div className="sidebar">
-          <div className="sidebar-header">
-            <h2 className="top-text">Project Kickoff: Alpha Launch</h2>
-            <div className="check-container">
-              <button
-                className="check-btn"
-                aria-haspopup="menu"
-                aria-label="Attendance"
-              >
-                <img src={checkmark} className="check" alt="" />
-              </button>
-              <div className="check-dropdown" role="menu">
-                <button role="menuitem">Attending</button>
-                <button role="menuitem">Maybe</button>
-                <button role="menuitem">Not attending</button>
+            <>
+              <div className="sidebar-header">
+                <h2 className="top-text">{selectedEvent.title}</h2>
               </div>
-            </div>
-          </div>
-          <p>Conference Room 2B</p>
-          <br />
-          <small>
-            Tuesday, September 9, 2025
-            <br />
-            10:00 am to 11:30 am
-          </small>
-          <br />
-          <p>
-            <h4 style={{ display: "inline", margin: 0 }}>Hosted by:</h4> Sarah
-            Johnson <br></br>(Product Manager)
-          </p>
-          <br></br>
-          <h2>Notes:</h2>
-          <p>
-            Initial kickoff meeting to align teams on project scope,
-            deliverables, and timeline. Bring laptops and review the draft
-            project charter in advance.
-          </p>
-          {role === "Admin" && (
-          <a className="remove-event-link" href="#">
-            {activeSegment === "reminders" ? "Remove Reminder" : "Remove Event"}
-          </a>
-          )}
+
+              <small>
+                {new Date(selectedEvent.eventDate).toLocaleDateString("en-US", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </small>
+
+              <br />
+              <p>{selectedEvent.description}</p>
+
+              <p>
+                <strong>Created by:</strong> {selectedEvent.createdBy}
+              </p>
+
+              {role === "Admin" && (
+                <a className="remove-event-link" href="#">
+                  Remove Event
+                </a>
+              )}
+            </>
+          
         </div>
+          ): 
+          <p>Select date to view details</p>}
       </section>
     </div>
   );
