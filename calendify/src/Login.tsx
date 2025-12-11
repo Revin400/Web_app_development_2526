@@ -68,7 +68,7 @@ const Login: React.FC = () => {
               type="text"
               name="employeenumber"
               id="employeenumber"
-              placeholder="Enter your employee number"
+              placeholder="Enter your Email address"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>

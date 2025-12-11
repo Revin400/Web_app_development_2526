@@ -9,7 +9,6 @@ public interface IEmployeeService
 
     Task <Employee> EditEmployeeAsync(Employee employee);
 
-    //i want to be able to delete an employee
     // Task<Employee> GetByIdAsync(Employee employee);
 
     // i want to be able to change my own password
