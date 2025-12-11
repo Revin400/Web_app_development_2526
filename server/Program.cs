@@ -13,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IOfficeAttendanceService, OfficeAttendanceService>();
 

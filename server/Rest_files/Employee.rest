@@ -1,0 +1,48 @@
+### Get Employees
+GET http://localhost:5000/api/Employee
+
+###
+
+### Get Employee by ID
+GET http://localhost:5000/api/Employee/1
+###
+
+
+### Edit Employee
+### Vraag docent
+PUT http://localhost:5000/api/Employee
+Content-Type: application/json
+
+{
+    "Userid": 1,
+    "Name": "John",
+    "Role": "",
+    "email": "1@1.com",
+    "password": ""
+}
+
+
+### Edit Employee with invalid data
+PUT http://localhost:5000/api/Employee
+Content-Type: application/json
+
+{
+    "Userid": 1,
+    "Name": "",
+    "Role": "",
+    "email": "niet-een-email",
+    "password": ""
+}
+
+
+
+### Delete Employee
+### kan niet want je bent geen admin!!!
+DELETE http://localhost:5000/api/Employee/1
+
+
+### Get current employee (me)
+# GET http://localhost:5000/api/Employee/1
+# Authorization: 
+
+
