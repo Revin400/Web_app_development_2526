@@ -46,9 +46,6 @@ const RegistrationPage: React.FC = () => {
       <div className="Registration-form-container">
         <form className="Registration-form" onSubmit={handleRegistration}>
           <h2>Register</h2>
-
-          {error && <p className="error-text">{error}</p>}
-
           <input
             type="text"
             placeholder="Name"
@@ -74,7 +71,8 @@ const RegistrationPage: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             className="input-field"
             required
-          />
+          />       
+          {error && <p className="error-text">{error}</p>}
 
           <button type="submit" className="registration-button">
             Register

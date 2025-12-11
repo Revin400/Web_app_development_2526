@@ -55,6 +55,26 @@ public async Task<Employee?> LoginAsync(string email, string password)
             throw new Exception("An employee with this email already exists.");
         }
 
+        if (password.Length < 8)
+        {
+            throw new Exception("Password must be at least 8 characters long.");
+        }
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[A-Z]"))
+        {
+            throw new Exception("Password must contain at least one uppercase letter.");
+        }
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[a-z]"))
+        {
+            throw new Exception("Password must contain at least one lowercase letter.");
+        }
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]"))
+        {
+            throw new Exception("Password must contain at least one special character.");
+        }
+
         var newEmployee = new Employee
         {
             Name = name,
