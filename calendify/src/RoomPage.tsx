@@ -12,11 +12,6 @@ export default function AvailableRooms() {
       if (!loading && !isLoggedIn) {
         navigate("/login");
       }
-  
-      if(role !== "Admin")
-      {
-        navigate("/calendar");
-      }
     } , [isLoggedIn, navigate]);
   
 

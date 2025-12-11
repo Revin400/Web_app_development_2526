@@ -184,7 +184,20 @@ const CalendarPage = () => {
             <>
               <div className="sidebar-header">
                 <h2 className="top-text">{selectedEvent.title}</h2>
+
+            <div className="check-container">
+              <button className="check-btn" aria-haspopup="menu" aria-label="Attendance">
+                <img src={checkmark} className="check" alt="" />
+              </button>
+
+              <div className="check-dropdown" role="menu">
+                <button role="menuitem">Attending</button>
+                <button role="menuitem">Maybe</button>
+                <button role="menuitem">Not attending</button>
               </div>
+            </div>
+              </div>
+          
 
               <small>
                 {new Date(selectedEvent.eventDate).toLocaleDateString("en-US", {
