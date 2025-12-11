@@ -31,6 +31,29 @@ public class EmployeeService(ApplicationDbContext db) : IEmployeeService
         }
         return emp;
     }
+
+
+
+        public async Task<bool> ChangePasswordAsync(int userId, string oldPassword, string newPassword)
+    {
+        var employee = await GetByIdAsync(userId);
+        if (employee == null)
+            return false;
+
+        // Verify old password matches
+        if (employee.Password != oldPassword)
+            return false;
+
+        // Update to new password
+        employee.Password = newPassword;
+        await db.SaveChangesAsync();
+        return true;
+    }
+
+
+
+
+
 }
 
    

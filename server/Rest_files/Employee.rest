@@ -9,7 +9,7 @@ GET http://localhost:5000/api/Employee/1
 
 
 ### Edit Employee
-### Vraag docent
+### alleen naam en email mogen aangepast worden
 PUT http://localhost:5000/api/Employee
 Content-Type: application/json
 
@@ -35,10 +35,19 @@ Content-Type: application/json
 }
 
 
-
 ### Delete Employee
 ### kan niet want je bent geen admin!!!
 DELETE http://localhost:5000/api/Employee/1
+
+
+### Change Password
+POST http://localhost:5000/api/Employee/2/change-password
+Content-Type: application/json
+
+{
+  "oldPassword": "test123",
+  "newPassword": "newPassword456"
+}
 
 
 ### Get current employee (me)
