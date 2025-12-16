@@ -13,14 +13,14 @@ public class ApplicationDbContext : DbContext
     public DbSet<Event> Events { get; set; }
     
     public DbSet<OfficeAttendance> OfficeAttendance {get; set;}
-    public DbSet<RoomBooking> RoomBookings { get; set; } // <- Added RoomBooking
+    public DbSet<RoomBooking> RoomBookings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Employee>().ToTable("employees");
         modelBuilder.Entity<Admin>().ToTable("admins");
-        modelBuilder.Entity<RoomBooking>().ToTable("roombookings"); // <- Table mapping
+        modelBuilder.Entity<RoomBooking>().ToTable("roombookings");
 
         modelBuilder.Entity<Employee>()
             .HasKey(e => e.UserId);
