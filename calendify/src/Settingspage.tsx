@@ -19,6 +19,7 @@ const SettingsPage = () => {
 
   const [notifEmail, setNotifEmail] = useState(true);
   const [notifInApp, setNotifInApp] = useState(true);
+  const [loggedInUser, setLoggedInUser] = useState<any>(null);
 
   const passwordError = useMemo(() => {
     if (!newPassword && !confirmPassword) return "";
@@ -36,18 +37,6 @@ const SettingsPage = () => {
     }
   };
 
-  const handleSavePassword = () => {
-    if (passwordError) return;
-
-    // TODO: call API endpoint
-    console.log("Save password", { currentPassword, newPassword });
-
-    // reset & close
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    closeModal();
-  };
 
   const handleSaveEmail = () => {
     if (!email || email !== emailConfirm) return;
@@ -65,6 +54,51 @@ const SettingsPage = () => {
     console.log("Save notifications", { notifEmail, notifInApp });
     closeModal();
   };
+
+
+  const GetLoggedInUser = () => {
+    try {
+      const user = fetch("http://localhost:5000/api/Auth/session", {
+        method: "GET",
+      });
+      setLoggedInUser(user);
+
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+
+
+  const handleSavePassword = async (e: React.FormEvent) => {
+    GetLoggedInUser();
+    e.preventDefault();
+    try {
+      
+
+      const res = await fetch("http://localhost:5000/api/Employee/2/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"oldPassword": currentPassword, "newPassword": newPassword }),
+      });
+
+      if (res.ok) {
+            // reset & close
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    closeModal();
+  } 
+  alert(`Wachtwoord succesvol gewijzigd. ${loggedInUser}`);
+
+  } catch (err) {
+      console.error(err);
+    }
+  }
+
 
   return (
     <div className="settings-page">

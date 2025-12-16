@@ -45,8 +45,8 @@ POST http://localhost:5000/api/Employee/2/change-password
 Content-Type: application/json
 
 {
-  "oldPassword": "test123",
-  "newPassword": "newPassword456"
+  "oldPassword": "newPassword456",
+  "newPassword": "newPassword4586"
 }
 
 
