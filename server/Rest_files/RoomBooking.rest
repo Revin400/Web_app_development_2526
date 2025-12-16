@@ -1,0 +1,60 @@
+### Get All Room Bookings
+GET http://localhost:5000/api/RoomBooking
+###
+
+### Get Room Booking by ID
+GET http://localhost:5000/api/RoomBooking/1
+###
+
+### Create Room Booking
+POST http://localhost:5000/api/RoomBooking
+Content-Type: application/json
+
+{
+    "RoomId": 101,
+    "UserId": "1",
+    "BookingDate": "2025-12-20",
+    "StartTime": "09:00:00",
+    "EndTime": "10:00:00",
+    "Purpose": "Team Meeting"
+}
+###
+
+### Edit Room Booking
+### Only RoomId, BookingDate, StartTime, EndTime, and Purpose can be updated
+PUT http://localhost:5000/api/RoomBooking
+Content-Type: application/json
+
+{
+    "Id": 1,
+    "RoomId": 102,
+    "UserId": "1",
+    "BookingDate": "2025-12-21",
+    "StartTime": "10:00:00",
+    "EndTime": "11:00:00",
+    "Purpose": "Project Discussion"
+}
+###
+
+### Edit Room Booking with invalid data
+PUT http://localhost:5000/api/RoomBooking
+Content-Type: application/json
+
+{
+    "Id": 1,
+    "RoomId": 0,
+    "UserId": "1",
+    "BookingDate": "invalid-date",
+    "StartTime": "10:00:00",
+    "EndTime": "09:00:00",
+    "Purpose": ""
+}
+###
+
+### Delete Room Booking
+DELETE http://localhost:5000/api/RoomBooking/1
+###
+
+### Get Bookings by User ID
+GET http://localhost:5000/api/RoomBooking/user/1
+###
