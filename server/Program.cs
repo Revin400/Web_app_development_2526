@@ -16,6 +16,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IOfficeAttendanceService, OfficeAttendanceService>();
+builder.Services.AddScoped<IRoomBookingService, RoomBookingService>();
 
 
 builder.Services.AddDistributedMemoryCache();
@@ -41,6 +42,12 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Urls.Add("http://localhost:5000");
+
+if (app.Environment.IsDevelopment())
+{
+    // Show detailed exception information in development to aid debugging
+    app.UseDeveloperExceptionPage();
+}
 
 app.UseCors("AllowFrontend");
 app.UseSession();
