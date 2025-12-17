@@ -32,7 +32,7 @@ public async Task<Employee?> LoginAsync(string email, string password)
 
     if (admin != null)
     {
-        _http.HttpContext!.Session.SetInt32("AdminId", admin.AdminId);
+        _http.HttpContext!.Session.SetInt32("UserId", admin.UserId);
         _http.HttpContext.Session.SetString("Role", "Admin");
         _http.HttpContext.Session.SetString("Name", employee.Name);
     }
@@ -53,6 +53,26 @@ public async Task<Employee?> LoginAsync(string email, string password)
         if (existingEmployee != null)
         {
             throw new Exception("An employee with this email already exists.");
+        }
+
+        if (password.Length < 8)
+        {
+            throw new Exception("Password must be at least 8 characters long.");
+        }
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[A-Z]"))
+        {
+            throw new Exception("Password must contain at least one uppercase letter.");
+        }
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[a-z]"))
+        {
+            throw new Exception("Password must contain at least one lowercase letter.");
+        }
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(password, @"[!@#$%^&*()_+\-=\[\]{};':""\\|,.<>\/?]"))
+        {
+            throw new Exception("Password must contain at least one special character.");
         }
 
         var newEmployee = new Employee

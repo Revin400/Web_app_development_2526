@@ -30,6 +30,7 @@ public class AuthController(IAuthService service) : ControllerBase
     [HttpGet("session")]
     public IActionResult CheckSession()
     {
+        var userId = HttpContext.Session.GetInt32("UserId");
         var role = HttpContext.Session.GetString("Role");
         var name = HttpContext.Session.GetString("Name");
 
@@ -37,6 +38,7 @@ public class AuthController(IAuthService service) : ControllerBase
         {
             return Ok(new
             {
+                userId = (int?)null,
                 isLoggedIn = false,
                 name = (string?)null,
                 role = (string?)null
@@ -45,6 +47,7 @@ public class AuthController(IAuthService service) : ControllerBase
 
         return Ok(new
         {
+            userId = userId,
             isLoggedIn = true,
             name = name,
             role = role
