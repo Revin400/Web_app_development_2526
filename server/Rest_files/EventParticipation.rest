@@ -37,3 +37,6 @@ Content-Type: application/json
   "Eventid": 2,
   "UserId": 1
 }
+
+### Get Participation Status for event im attending
+GET http://localhost:5000/api/eventparticipation/status/5

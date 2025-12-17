@@ -8,7 +8,7 @@ public class EventParticipation
     public int UserId { get; set; }
     public Employee User { get; set; } = null!;
 
-    public string Status { get; set; }
+    public string Status { get; set; } = "Pending";
 }
 
 public class ParticipateRequest

@@ -1,5 +1,5 @@
 import "./CalendarPage.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import calendifylogo from "./calendifylogo.png";
 import Profilepic from "./Default_pfp.png";
@@ -10,12 +10,21 @@ const CalendarPage = () => {
   const [activeCard, setActiveCard] = React.useState(null);
   const [activeSegment, setActiveSegment] = React.useState("events");
   const navigate = useNavigate();
-  const { role, loading, isLoggedIn, name } = useSession();
-
+  const { userId, role, loading, isLoggedIn, name } = useSession();
   const [events, setEvents] = React.useState<EventType[]>([]);
   const [selectedEvent, setSelectedEvent] = React.useState<EventType | null>(
     null
   );
+  const [popupMessage, setPopupMessage] = React.useState<string | null>(null);
+  const [popupType, setPopupType] = React.useState<"success" | "error">(
+    "success"
+  );
+
+  const [participationStatus, setParticipationStatus] = useState<
+    "Attending" | "Not attending" | null
+  >(null);
+
+  
 
   type EventType = {
     id: number;
@@ -63,6 +72,90 @@ const CalendarPage = () => {
     { day: 15, weekday: "MON" },
     { day: 28, weekday: "SUN" },
   ];
+
+  const HandleEventParticipation = async (eventId: number, userId: number) => {
+    if (!userId) return;
+
+    try {
+      const res = await fetch(
+        "http://localhost:5000/api/eventparticipation/participate",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ eventId, userId }),
+        }
+      );
+
+      const message = await res.text();
+
+      if (!res.ok) {
+        setPopupType("error");
+        setPopupMessage(message);
+        return;
+      }
+
+      setPopupType("success");
+      setPopupMessage("You are now attending this event");
+
+      setParticipationStatus("Attending");
+
+      fetchParticipationStatus(eventId);
+    } catch {
+      setPopupType("error");
+      setPopupMessage("Network error");
+    }
+  };
+
+  const HandleRemoveParticipation = async (eventId: number, userId: number) => {
+    if (!userId) return;
+
+    try {
+      const res = await fetch("http://localhost:5000/api/eventparticipation", {
+        method: "DELETE",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eventId, userId }),
+      });
+
+      const message = await res.text();
+
+      if (!res.ok) {
+        setPopupType("error");
+        setPopupMessage(message);
+        return;
+      }
+
+      setPopupType("success");
+      setPopupMessage("You are no longer attending this event");
+
+      setParticipationStatus("Not attending");
+
+      fetchParticipationStatus(eventId);
+    } catch {
+      setPopupType("error");
+      setPopupMessage("Network error");
+    }
+  };
+
+  const fetchParticipationStatus = async (eventId: number) => {
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/eventparticipation/status/${eventId}`,
+        { credentials: "include" }
+      );
+
+      if (!res.ok) {
+        setParticipationStatus("Not attending");
+        return;
+      }
+
+      const data = await res.json();
+      setParticipationStatus(data.status);
+    } catch {
+      setParticipationStatus("Not attending");
+    }
+  };
 
   if (loading) {
     return (
@@ -154,7 +247,10 @@ const CalendarPage = () => {
                 className={`card card-btn${
                   selectedEvent?.id === id ? " is-active" : ""
                 }`}
-                onClick={() => setSelectedEvent(fullEvent)}
+                onClick={() => {
+                  setSelectedEvent(fullEvent);
+                  fetchParticipationStatus(fullEvent.id);
+                }}
               >
                 {weekday} <br />
                 <span style={{ fontSize: "2em", fontWeight: "bold" }}>
@@ -179,25 +275,41 @@ const CalendarPage = () => {
             ))}
         </div>
 
-          {selectedEvent ? (
-        <div className="sidebar">
+        {selectedEvent ? (
+          <div className="sidebar">
             <>
               <div className="sidebar-header">
                 <h2 className="top-text">{selectedEvent.title}</h2>
 
-            <div className="check-container">
-              <button className="check-btn" aria-haspopup="menu" aria-label="Attendance">
-                <img src={checkmark} className="check" alt="" />
-              </button>
+                <div className="check-container">
+                  <button
+                    className="check-btn"
+                    aria-haspopup="menu"
+                    aria-label="Attendance"
+                  >
+                    <img src={checkmark} className="check" alt="" />
+                  </button>
 
-              <div className="check-dropdown" role="menu">
-                <button role="menuitem">Attending</button>
-                <button role="menuitem">Maybe</button>
-                <button role="menuitem">Not attending</button>
+                  <div className="check-dropdown" role="menu">
+                    <button
+                      role="menuitem"
+                      onClick={() =>
+                        HandleEventParticipation(selectedEvent.id, userId)
+                      }
+                    >
+                      Attending
+                    </button>
+                    <button
+                      role="menuitem"
+                      onClick={() =>
+                        HandleRemoveParticipation(selectedEvent.id, userId)
+                      }
+                    >
+                      Not Attending
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-              </div>
-          
 
               <small>
                 {new Date(selectedEvent.eventDate).toLocaleDateString("en-US", {
@@ -215,17 +327,43 @@ const CalendarPage = () => {
                 <strong>Created by:</strong> {selectedEvent.createdBy}
               </p>
 
+              {participationStatus && (
+                <p className="participation-status">
+                  <strong>Status:</strong> {participationStatus}
+                </p>
+              )}
+
               {role === "Admin" && (
                 <a className="remove-event-link" href="#">
                   Remove Event
                 </a>
               )}
             </>
-          
-        </div>
-          ): 
-          <p>Select date to view details</p>}
+          </div>
+        ) : (
+          <p>Select date to view details</p>
+        )}
       </section>
+      {popupMessage && (
+        <div className="ahp-modalBackdrop">
+          <div className="ahp-modal">
+            <h2 className="ahp-modalTitle">
+              {popupType === "success" ? "Success" : "Error"}
+            </h2>
+
+            <p>{popupMessage}</p>
+
+            <div className="ahp-formActions">
+              <button
+                className="ahp-btn ahp-btnDark"
+                onClick={() => setPopupMessage(null)}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
