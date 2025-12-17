@@ -1,0 +1,8 @@
+### Participate in Event
+POST http://localhost:5000/api/events/participate
+Content-Type: application/json
+
+{
+  "Eventid": 1,
+  "UserId": 1
+}

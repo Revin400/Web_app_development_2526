@@ -10,10 +10,12 @@ namespace Server.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventService _service;
+        private readonly IEventParticipationService _participationService;
 
-        public EventsController(IEventService service)
+        public EventsController(IEventService service, IEventParticipationService participationService)
         {
             _service = service;
+            _participationService = participationService;
         }
 
         [HttpGet]
@@ -31,7 +33,7 @@ namespace Server.Controllers
 
             return Ok(ev);
         }
-        
+
         [HttpPost]
         [AdminOnly]
         public async Task<ActionResult<Event>> Create(Event newEvent)
@@ -62,6 +64,27 @@ namespace Server.Controllers
                 return NotFound();
 
             return NoContent();
+        }
+
+        [HttpPost("participate")]
+        public async Task<IActionResult> Participate([FromBody] ParticipateRequest request)
+        {   
+            var sessionUserId = HttpContext.Session.GetInt32("UserId");
+
+            if (sessionUserId == null)
+                return Unauthorized("User must be logged in");
+
+            if (sessionUserId != request.UserId)
+                return Unauthorized("Users can only participate on their own behalf");
+            try
+            {
+                var ev = await _service.GetEventByIdAsync(request.EventId);
+                return Ok(ev);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
