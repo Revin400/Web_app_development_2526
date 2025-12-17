@@ -32,7 +32,7 @@ public async Task<Employee?> LoginAsync(string email, string password)
 
     if (admin != null)
     {
-        _http.HttpContext!.Session.SetInt32("AdminId", admin.AdminId);
+        _http.HttpContext!.Session.SetInt32("UserId", admin.UserId);
         _http.HttpContext.Session.SetString("Role", "Admin");
         _http.HttpContext.Session.SetString("Name", employee.Name);
     }
