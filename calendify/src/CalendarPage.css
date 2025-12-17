@@ -265,3 +265,19 @@ body{
   align-items: center;       
   gap: 15px;                 
 }
+
+.ahp-modal.error {
+  border-left: 5px solid #c0392b;
+}
+
+.ahp-modal.success {
+  border-left: 5px solid #27ae60;
+}
+
+.participation-status {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  background: rgba(255, 187, 152, 0.15);
+}

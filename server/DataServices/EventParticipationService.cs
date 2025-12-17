@@ -79,7 +79,7 @@ public class EventParticipationService : IEventParticipationService
             .FirstOrDefaultAsync(ep =>
                 ep.EventId == eventId &&
                 ep.UserId == userId);
-        
+
         var ev = await _eventService.GetEventByIdAsync(eventId);
 
         if (ev == null)
@@ -87,15 +87,25 @@ public class EventParticipationService : IEventParticipationService
 
         if (participations == null)
             throw new Exception("User is not participating in this event");
-        
+
         if (participations.Event.EventDate <= DateTime.Now)
             throw new Exception("Cannot cancel participation for past or ongoing events");
-        
+
 
         db.EventParticipations.Remove(participations);
         await db.SaveChangesAsync();
 
         return await GetAllParticipationsAsync();
+    }
+
+    public async Task<string> GetParticipationStatusAsync(int eventId, int userId)
+    {
+        var participation = await db.EventParticipations
+            .FirstOrDefaultAsync(ep =>
+                ep.EventId == eventId &&
+                ep.UserId == userId);
+
+        return participation.Status;
     }
 }
 
