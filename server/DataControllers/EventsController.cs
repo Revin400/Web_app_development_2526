@@ -65,26 +65,5 @@ namespace Server.Controllers
 
             return NoContent();
         }
-
-        [HttpPost("participate")]
-        public async Task<IActionResult> Participate([FromBody] ParticipateRequest request)
-        {   
-            var sessionUserId = HttpContext.Session.GetInt32("UserId");
-
-            if (sessionUserId == null)
-                return Unauthorized("User must be logged in");
-
-            if (sessionUserId != request.UserId)
-                return Unauthorized("Users can only participate on their own behalf");
-            try
-            {
-                var ev = await _service.GetEventByIdAsync(request.EventId);
-                return Ok(ev);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
     }
 }

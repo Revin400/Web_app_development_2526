@@ -24,6 +24,17 @@ public class EventParticipationService : IEventParticipationService
         _http = http;
     }
 
+    public async Task<List<ParticipateResponse>> GetAllParticipationsAsync()
+    {
+        return await db.EventParticipations
+            .Select(ep => new ParticipateResponse
+            {
+                EventId = ep.EventId,
+                UserId = ep.UserId,
+            })
+            .ToListAsync();
+    }
+
     public async Task<Event> ParticipateInEventAsync(int eventId, int userId)
     {
         var ev = await _eventService.GetEventByIdAsync(eventId);
@@ -33,13 +44,22 @@ public class EventParticipationService : IEventParticipationService
                 ep.EventId == eventId &&
                 ep.UserId == userId);
 
-        
+
         if (ev == null)
             throw new Exception("Event not found");
-    
+
+        var now = DateTime.Now;
+        var eventStart = ev.EventDate;
+
+        if (eventStart <= now.AddHours(-1))
+            throw new Exception("Cannot participate in past events");
+
+        if (eventStart <= now)
+            throw new Exception("Cannot participate in ongoing events");
+
         if (existing != null)
             throw new Exception("User is already participating in this event");
-        
+
 
         var participation = new EventParticipation
         {
@@ -53,4 +73,29 @@ public class EventParticipationService : IEventParticipationService
         return await _eventService.GetEventByIdAsync(eventId);
     }
 
+    public async Task<List<ParticipateResponse>> RemoveParticipationAsync(int eventId, int userId)
+    {
+        var participations = await db.EventParticipations
+            .FirstOrDefaultAsync(ep =>
+                ep.EventId == eventId &&
+                ep.UserId == userId);
+        
+        var ev = await _eventService.GetEventByIdAsync(eventId);
+
+        if (ev == null)
+            throw new Exception("Event not found");
+
+        if (participations == null)
+            throw new Exception("User is not participating in this event");
+        
+        if (participations.Event.EventDate <= DateTime.Now)
+            throw new Exception("Cannot cancel participation for past or ongoing events");
+        
+
+        db.EventParticipations.Remove(participations);
+        await db.SaveChangesAsync();
+
+        return await GetAllParticipationsAsync();
+    }
 }
+

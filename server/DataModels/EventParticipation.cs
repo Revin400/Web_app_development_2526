@@ -8,10 +8,16 @@ public class EventParticipation
     public int UserId { get; set; }
     public Employee User { get; set; } = null!;
 
-    public string Status { get; set; } = "Pending";
+    public string Status { get; set; }
 }
 
 public class ParticipateRequest
+{
+    public int EventId { get; set; }
+    public int UserId { get; set; }
+}
+
+public class ParticipateResponse
 {
     public int EventId { get; set; }
     public int UserId { get; set; }
