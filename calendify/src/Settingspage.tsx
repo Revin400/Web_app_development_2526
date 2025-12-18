@@ -1,5 +1,5 @@
 import "./Settingspage.css";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type ModalType = "password" | "email" | "notifications" | null;
@@ -19,6 +19,7 @@ const SettingsPage = () => {
 
   const [notifEmail, setNotifEmail] = useState(true);
   const [notifInApp, setNotifInApp] = useState(true);
+  const [loggedInUser, setLoggedInUser] = useState<any>(null);
 
   const passwordError = useMemo(() => {
     if (!newPassword && !confirmPassword) return "";
@@ -36,18 +37,23 @@ const SettingsPage = () => {
     }
   };
 
-  const handleSavePassword = () => {
-    if (passwordError) return;
+  useEffect(() => {
+    GetLoggedInUser();
+  }, []);
 
-    // TODO: call API endpoint
-    console.log("Save password", { currentPassword, newPassword });
 
-    // reset & close
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    closeModal();
+  const HandleLogOut = async () => {
+    try {
+      await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      navigate("/");
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
   };
+
 
   const handleSaveEmail = () => {
     if (!email || email !== emailConfirm) return;
@@ -66,14 +72,60 @@ const SettingsPage = () => {
     closeModal();
   };
 
+
+  const GetLoggedInUser =  async () => {
+    try {
+      const user = fetch("http://localhost:5000/api/Auth/session", {
+        credentials: "include",
+        method: "GET",
+      });
+      
+      const userData = await user.then(res => res.json());
+      setLoggedInUser(userData);
+      
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+
+
+  const handleSavePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      
+
+      const res = await fetch(`http://localhost:5000/api/Employee/${loggedInUser?.userId}/change-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"oldPassword": currentPassword, "newPassword": newPassword }),
+      });
+
+      if (res.ok) {
+            // reset & close
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    closeModal();
+  } 
+  alert(`Wachtwoord succesvol gewijzigd.`);
+
+  } catch (err) {
+      console.error(err);
+    }
+  }
+
+
   return (
     <div className="settings-page">
       <div className="settings-sidebar">
-        <a onClick={() => navigate("/settings")}>My Settings</a>
+        <a onClick={() => navigate("/settings")}>My Settings </a>
         <a onClick={() => navigate("/calendar")}>My Reminders</a>
         <a onClick={() => navigate("#")}>Appearance</a>
         <a onClick={() => navigate("/new-Reminders")}>New Reminders</a>
-        <a onClick={() => navigate("/")}>Log Out</a>
+        <a onClick={() => HandleLogOut()}>Log Out</a>
       </div>
 
       <div className="settings-content">
