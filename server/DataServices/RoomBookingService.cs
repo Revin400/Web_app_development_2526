@@ -18,18 +18,45 @@ public class RoomBookingService(ApplicationDbContext db) : IRoomBookingService
             .FirstOrDefaultAsync(b => b.Id == bookingId);
     }
 
-    public async Task<RoomBooking> CreateBookingAsync(RoomBooking booking)
-    {
-        db.RoomBookings.Add(booking);
-        await db.SaveChangesAsync();
-        return booking;
-    }
+public async Task<RoomBooking> CreateBookingAsync(RoomBooking booking)
+{
+    var dayStart = booking.BookingDate.Date;
+    var dayEnd = dayStart.AddDays(1);
+
+    bool conflict = await db.RoomBookings
+        .Where(b =>
+            b.RoomId == booking.RoomId &&
+            b.BookingDate >= dayStart &&
+            b.BookingDate < dayEnd
+        )
+        .AnyAsync(b =>
+            booking.StartTime < b.EndTime &&
+            booking.EndTime > b.StartTime
+        );
+
+    if (conflict)
+        return null;
+
+    db.RoomBookings.Add(booking);
+    await db.SaveChangesAsync();
+    return booking;
+}
+
 
     public async Task<RoomBooking> EditBookingAsync(RoomBooking booking)
     {
         var existing = await GetByIdAsync(booking.Id);
         if (existing == null)
             return null;
+
+        // Check for conflicts excluding this booking itself
+        bool conflict = await db.RoomBookings
+            .Where(b => b.RoomId == booking.RoomId 
+                        && b.BookingDate.Date == booking.BookingDate.Date && b.Id != booking.Id)
+            .AnyAsync(b => (booking.StartTime < b.EndTime) && (booking.EndTime > b.StartTime));
+
+        if (conflict)
+            return null; // conflict, can't update
 
         existing.RoomId = booking.RoomId;
         existing.UserId = booking.UserId;

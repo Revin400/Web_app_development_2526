@@ -207,23 +207,32 @@ const CalendarPage = () => {
           <div className="profile-container">
             <img src={Profilepic} alt="User profile" className="profile-pic" />
 
-            <div className="profile-dropdown">
-              <button>Profile</button>
-              <button>My Account</button>
-              <button onClick={() => navigate("/settings")}>Settings</button>
-              <button
-                onClick={() => {
-                  fetch("http://localhost:5000/api/Auth/logout", {
-                    method: "POST",
-                    credentials: "include",
-                  }).then(() => {
-                    navigate("/");
-                  });
-                }}
-              >
-                Logout
-              </button>
-            </div>
+<div className="profile-dropdown">
+  <button>Profile</button>
+  <button>My Account</button>
+
+  <button onClick={() => navigate("/settings")}>
+    Settings
+  </button>
+
+  {/* 👇 NEW ROOM PAGE BUTTON */}
+  <button onClick={() => navigate("/roompage")}>
+    Room Booking
+  </button>
+
+  <button
+    onClick={() => {
+      fetch("http://localhost:5000/api/Auth/logout", {
+        method: "POST",
+        credentials: "include",
+      }).then(() => {
+        navigate("/");
+      });
+    }}
+  >
+    Logout
+  </button>
+</div>
           </div>
           {role === "Admin" && (
             <button

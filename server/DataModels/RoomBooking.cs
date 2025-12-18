@@ -4,7 +4,7 @@ namespace Server.Models
     {
         public int Id { get; set; }
         public int RoomId { get; set; }
-        public string UserId { get; set; }  // references the logged-in user
+        public int UserId { get; set; }  // references the logged-in user
         public DateTime BookingDate { get; set; }
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
