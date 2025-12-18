@@ -10,10 +10,12 @@ namespace Server.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventService _service;
+        private readonly IEventParticipationService _participationService;
 
-        public EventsController(IEventService service)
+        public EventsController(IEventService service, IEventParticipationService participationService)
         {
             _service = service;
+            _participationService = participationService;
         }
 
         [HttpGet]
@@ -31,7 +33,7 @@ namespace Server.Controllers
 
             return Ok(ev);
         }
-        
+
         [HttpPost]
         [AdminOnly]
         public async Task<ActionResult<Event>> Create(Event newEvent)

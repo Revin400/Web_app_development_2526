@@ -10,4 +10,7 @@ public class Employee
     public string Role { get; set; }
 
     public string Password { get; set; }
+
+    public ICollection<EventParticipation> EventParticipations { get; set; }
+        = new List<EventParticipation>();
 }
