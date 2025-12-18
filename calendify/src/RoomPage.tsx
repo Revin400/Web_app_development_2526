@@ -27,82 +27,85 @@ const RoomPage: React.FC = () => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [purpose, setPurpose] = useState("");
-
   const [userId, setUserId] = useState<number | null>(null);
 
-  // 🔹 Load session on page load
+  const [message, setMessage] = useState<string | null>(null); // new state for frontend messages
+
+  // Load session on page load
   useEffect(() => {
     const loadSession = async () => {
       try {
         const res = await fetch("http://localhost:5000/api/Auth/session", {
           credentials: "include",
         });
-
         const data: SessionResponse = await res.json();
-
         if (!data.isLoggedIn || !data.userId) {
-          alert("You must be logged in to book a room.");
+          setMessage("You must be logged in to book a room.");
           navigate("/login");
           return;
         }
-
         setUserId(data.userId);
       } catch {
-        alert("Failed to check login session.");
+        setMessage("Failed to check login session.");
       }
     };
-
     loadSession();
   }, [navigate]);
 
-  const handleConfirm = async () => {
-    if (!selectedRoom || !date || !startTime || !endTime || !purpose) {
-      alert("Please fill in all fields");
-      return;
-    }
+const handleConfirm = async () => {
+  setMessage(null); // clear previous message
 
-    if (!userId) {
-      alert("You must be logged in to book a room.");
-      return;
-    }
+  if (!selectedRoom || !date || !startTime || !endTime || !purpose) {
+    setMessage("Please fill in all fields");
+    return;
+  }
+  if (!userId) {
+    setMessage("You must be logged in to book a room.");
+    return;
+  }
 
-    const booking: Booking = {
-      roomId: selectedRoom,
-      userId: userId, // ✅ REAL USER ID
-      bookingDate: date,
-      startTime: startTime + ":00",
-      endTime: endTime + ":00",
-      purpose,
-    };
+  const booking: Booking = {
+    roomId: selectedRoom,
+    userId,
+    bookingDate: date,
+    startTime: startTime + ":00",
+    endTime: endTime + ":00",
+    purpose,
+  };
 
-    try {
-      const response = await fetch(
-        "http://localhost:5000/api/RoomBooking",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(booking),
-        }
-      );
+  try {
+    const response = await fetch("http://localhost:5000/api/RoomBooking", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(booking),
+    });
 
-      if (!response.ok) {
-        const msg = await response.text();
-        throw new Error(msg);
-      }
-
-      alert("Room booked successfully!");
-
+    if (response.ok) {
+      setMessage("Room booked successfully!");
       // Clear form
       setSelectedRoom(null);
       setDate("");
       setStartTime("");
       setEndTime("");
       setPurpose("");
-    } catch (err: any) {
-      alert(err.message || "Room is already booked for this timeslot");
+    } else if (response.status === 409) {
+      // Conflict: room already booked
+      try {
+        const json = await response.json();
+        setMessage(json.message || "Room is already booked for this timeslot");
+      } catch {
+        setMessage("Room is already booked for this timeslot");
+      }
+    } else {
+      // Other errors
+      const text = await response.text();
+      setMessage(text || "An error occurred while booking the room");
     }
-  };
+  } catch (err: any) {
+    setMessage(err.message);
+  }
+};
 
   return (
     <div className="page">
@@ -125,9 +128,7 @@ const RoomPage: React.FC = () => {
                 onClick={() => setSelectedRoom(room)}
               >
                 <span>Room {room}</span>
-                <span className="arrow">
-                  {selectedRoom === room ? "✓" : "›"}
-                </span>
+                <span className="arrow">{selectedRoom === room ? "✓" : "›"}</span>
               </div>
             ))}
           </div>
@@ -177,6 +178,9 @@ const RoomPage: React.FC = () => {
           <button className="confirm-btn" onClick={handleConfirm}>
             Confirm
           </button>
+
+          {/* Display message below the form */}
+          {message && <div className="message">{message}</div>}
         </div>
       </section>
     </div>

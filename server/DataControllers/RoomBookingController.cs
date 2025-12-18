@@ -28,6 +28,13 @@ public class RoomBookingController(IRoomBookingService service) : ControllerBase
     public async Task<ActionResult<RoomBooking>> CreateBooking(RoomBooking booking)
     {
         var createdBooking = await service.CreateBookingAsync(booking);
+
+        if (createdBooking == null)
+        {
+            // Return 409 Conflict with a message if room is already booked
+            return Conflict(new { message = "This room is already booked for the selected time slot." });
+        }
+
         return Ok(createdBooking);
     }
 

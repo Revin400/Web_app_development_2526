@@ -5,37 +5,43 @@ using Server.Services.Interfaces;
 
 namespace Server.Services;
 
-public class RoomBookingService(ApplicationDbContext db) : IRoomBookingService
+public class RoomBookingService : IRoomBookingService
 {
+    private readonly ApplicationDbContext db;
+
+    public RoomBookingService(ApplicationDbContext db)
+    {
+        this.db = db;
+    }
+
+    // Get all bookings
     public async Task<IEnumerable<RoomBooking>> GetAllAsync()
     {
         return await db.RoomBookings.ToListAsync();
     }
 
+    // Get booking by ID
     public async Task<RoomBooking> GetByIdAsync(int bookingId)
     {
-        return await db.RoomBookings
-            .FirstOrDefaultAsync(b => b.Id == bookingId);
+        return await db.RoomBookings.FirstOrDefaultAsync(b => b.Id == bookingId);
     }
 
+    // Create new booking
 public async Task<RoomBooking> CreateBookingAsync(RoomBooking booking)
 {
-    var dayStart = booking.BookingDate.Date;
-    var dayEnd = dayStart.AddDays(1);
+    // Pull only same room & same date bookings
+    var potentialConflicts = await db.RoomBookings
+        .Where(b => b.RoomId == booking.RoomId &&
+                    b.BookingDate.Date == booking.BookingDate.Date &&
+                    b.UserId != booking.UserId) // exclude current user
+        .ToListAsync();
 
-    bool conflict = await db.RoomBookings
-        .Where(b =>
-            b.RoomId == booking.RoomId &&
-            b.BookingDate >= dayStart &&
-            b.BookingDate < dayEnd
-        )
-        .AnyAsync(b =>
-            booking.StartTime < b.EndTime &&
-            booking.EndTime > b.StartTime
-        );
+    // Check for overlapping times with other users
+    bool conflict = potentialConflicts
+        .Any(b => booking.StartTime < b.EndTime && booking.EndTime > b.StartTime);
 
     if (conflict)
-        return null;
+        return null; // conflict, cannot book
 
     db.RoomBookings.Add(booking);
     await db.SaveChangesAsync();
@@ -43,32 +49,40 @@ public async Task<RoomBooking> CreateBookingAsync(RoomBooking booking)
 }
 
 
-    public async Task<RoomBooking> EditBookingAsync(RoomBooking booking)
-    {
-        var existing = await GetByIdAsync(booking.Id);
-        if (existing == null)
-            return null;
+    // Edit an existing booking
+public async Task<RoomBooking> EditBookingAsync(RoomBooking booking)
+{
+    var existing = await GetByIdAsync(booking.Id);
+    if (existing == null)
+        return null;
 
-        // Check for conflicts excluding this booking itself
-        bool conflict = await db.RoomBookings
-            .Where(b => b.RoomId == booking.RoomId 
-                        && b.BookingDate.Date == booking.BookingDate.Date && b.Id != booking.Id)
-            .AnyAsync(b => (booking.StartTime < b.EndTime) && (booking.EndTime > b.StartTime));
+    // Check other users’ bookings for conflicts (exclude self)
+    var potentialConflicts = await db.RoomBookings
+        .Where(b => b.RoomId == booking.RoomId &&
+                    b.BookingDate.Date == booking.BookingDate.Date &&
+                    b.Id != booking.Id &&
+                    b.UserId != booking.UserId) // exclude current user
+        .ToListAsync();
 
-        if (conflict)
-            return null; // conflict, can't update
+    bool conflict = potentialConflicts
+        .Any(b => booking.StartTime < b.EndTime && booking.EndTime > b.StartTime);
 
-        existing.RoomId = booking.RoomId;
-        existing.UserId = booking.UserId;
-        existing.BookingDate = booking.BookingDate;
-        existing.StartTime = booking.StartTime;
-        existing.EndTime = booking.EndTime;
-        existing.Purpose = booking.Purpose;
+    if (conflict)
+        return null; // conflict, cannot update
 
-        await db.SaveChangesAsync();
-        return existing;
-    }
+    // Update booking
+    existing.RoomId = booking.RoomId;
+    existing.UserId = booking.UserId;
+    existing.BookingDate = booking.BookingDate;
+    existing.StartTime = booking.StartTime;
+    existing.EndTime = booking.EndTime;
+    existing.Purpose = booking.Purpose;
 
+    await db.SaveChangesAsync();
+    return existing;
+}
+
+    // Delete a booking
     public async Task<bool> DeleteBookingAsync(int bookingId)
     {
         var booking = await GetByIdAsync(bookingId);
