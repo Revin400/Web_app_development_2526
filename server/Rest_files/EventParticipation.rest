@@ -40,3 +40,6 @@ Content-Type: application/json
 
 ### Get Participation Status for event im attending
 GET http://localhost:5000/api/eventparticipation/status/5
+
+### Get events that user is attending
+GET http://localhost:5000/api/eventparticipation/myevents

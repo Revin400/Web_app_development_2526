@@ -24,7 +24,13 @@ const CalendarPage = () => {
     "Attending" | "Not attending" | null
   >(null);
 
-  
+  const [MyEvents, setMyEvents] = useState<EventType[]>([]);
+
+useEffect(() => {
+  setSelectedEvent(null);
+  setParticipationStatus(null);
+}, [activeSegment]);
+
 
   type EventType = {
     id: number;
@@ -41,6 +47,8 @@ const CalendarPage = () => {
   }, [isLoggedIn, loading, navigate]);
 
   useEffect(() => {
+  
+    fetchMyEvents();
     fetch("http://localhost:5000/api/events", {
       credentials: "include",
     })
@@ -65,13 +73,18 @@ const CalendarPage = () => {
       fullEvent: e,
     };
   });
-
-  const remindersDays = [
-    { day: 3, weekday: "WED" },
-    { day: 10, weekday: "WED" },
-    { day: 15, weekday: "MON" },
-    { day: 28, weekday: "SUN" },
-  ];
+  const fetchMyEvents = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:5000/api/eventparticipation/myevents",
+        { credentials: "include" }
+      );
+      const data = await res.json();
+      setMyEvents(data);
+    } catch (error) {
+      console.error("Error fetching my events:", error);
+    }
+  };
 
   const HandleEventParticipation = async (eventId: number, userId: number) => {
     if (!userId) return;
@@ -184,9 +197,8 @@ const CalendarPage = () => {
               type="button"
               role="tab"
               aria-selected={activeSegment === "events"}
-              className={`seg-btn ${
-                activeSegment === "events" ? "is-active" : ""
-              }`}
+              className={`seg-btn ${activeSegment === "events" ? "is-active" : ""
+                }`}
               onClick={() => setActiveSegment("events")}
             >
               events
@@ -194,13 +206,12 @@ const CalendarPage = () => {
             <button
               type="button"
               role="tab"
-              aria-selected={activeSegment === "reminders"}
-              className={`seg-btn ${
-                activeSegment === "reminders" ? "is-active" : ""
-              }`}
-              onClick={() => setActiveSegment("reminders")}
+              aria-selected={activeSegment === "My Events"}
+              className={`seg-btn ${activeSegment === "My Events" ? "is-active" : ""
+                }`}
+              onClick={() => setActiveSegment("My Events")}
             >
-              reminders
+              My Events
             </button>
           </div>
 
@@ -230,12 +241,11 @@ const CalendarPage = () => {
               className="add-event-btn"
               onClick={() =>
                 navigate(
-                  activeSegment === "reminders" ? "/new-reminder" : "/new-event"
+                  activeSegment === "My Events" ? "/new-reminder" : "/new-event"
                 )
               }
             >
-              {activeSegment === "reminders" && "+ Add Reminder"}
-              {activeSegment === "events" && "+ Add Event"}
+              {activeSegment === "My Events" && "+ Add Event"}
             </button>
           )}
         </div>
@@ -244,9 +254,8 @@ const CalendarPage = () => {
             eventsDays.map(({ id, day, weekday, fullEvent }) => (
               <button
                 key={id}
-                className={`card card-btn${
-                  selectedEvent?.id === id ? " is-active" : ""
-                }`}
+                className={`card card-btn${selectedEvent?.id === id ? " is-active" : ""
+                  }`}
                 onClick={() => {
                   setSelectedEvent(fullEvent);
                   fetchParticipationStatus(fullEvent.id);
@@ -258,21 +267,31 @@ const CalendarPage = () => {
                 </span>
               </button>
             ))}
-          {activeSegment === "reminders" &&
-            remindersDays.map(({ day, weekday }) => (
-              <button
-                key={day}
-                className={`card card-btn${
-                  activeCard === day ? " is-active" : ""
-                }`}
-                onClick={() => setActiveCard(day)}
-              >
-                {weekday} <br />{" "}
-                <span style={{ fontSize: "2em", fontWeight: "bold" }}>
-                  {day}
-                </span>
-              </button>
-            ))}
+          {activeSegment === "My Events" &&
+            MyEvents.map((event) => {
+              const date = new Date(event.eventDate);
+              const day = date.getDate();
+              const weekday = date
+                .toLocaleDateString("en-US", { weekday: "short" })
+                .toUpperCase();
+
+              return (
+                <button
+                  key={event.id}
+                  className={`card card-btn${selectedEvent?.id === event.id ? " is-active" : ""
+                    }`}
+                  onClick={() => {
+                    setSelectedEvent(event);
+                    fetchParticipationStatus(event.id);
+                  }}
+                >
+                  {weekday} <br />
+                  <span style={{ fontSize: "2em", fontWeight: "bold" }}>
+                    {day}
+                  </span>
+                </button>
+              );
+            })}
         </div>
 
         {selectedEvent ? (
