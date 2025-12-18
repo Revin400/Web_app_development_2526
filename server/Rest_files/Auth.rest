@@ -1,10 +1,18 @@
-### Login
+### Login admin
 POST http://localhost:5000/api/Auth/login
 Content-Type: application/json
 
 {
   "email": "admin@calendify.local",
   "password": "admin123"
+}
+### Login employee
+POST http://localhost:5000/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "employee123"
 }
 
 ### login user
@@ -25,8 +33,8 @@ Content-Type: application/json
 
 {
   "name": "New User",
-  "email": "test@test.com",
-  "password": "test123"
+  "email": "test1@test.com",
+  "password": "Test123!"
 }
 
 ### Logout

@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { set } from "react-hook-form";
 
 type SessionInfo = {
-    UserId: number;
+    userId: number;
     isLoggedIn: boolean;
     name: string | null;
     role: string | null;
 };
 
 export function useSession() {
-    const [UserId, setUserId] = useState<number | null>(null);
+    const [userId, setUserId] = useState<number | null>(null);
     const [role, setRole] = useState<string | null>(null);
     const [name, setName] = useState<string | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,7 +23,7 @@ export function useSession() {
                 });
                 if (response.ok) {
                     const data: SessionInfo = await response.json();
-                    setUserId(data.UserId);
+                    setUserId(data.userId);
                     setIsLoggedIn(data.isLoggedIn);
                     setName(data.name);
                     setRole(data.role);
@@ -47,5 +47,5 @@ export function useSession() {
         fetchSession();
     }, []);
 
-    return { isLoggedIn, name, role, loading };
+    return { userId, isLoggedIn, name, role, loading };
 }

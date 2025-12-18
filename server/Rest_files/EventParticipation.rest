@@ -1,0 +1,42 @@
+### Get All Participations
+GET http://localhost:5000/api/eventparticipation
+
+
+### Participate in Event in the past
+POST http://localhost:5000/api/eventparticipation/participate
+Content-Type: application/json
+
+{
+  "Eventid": 1,
+  "UserId": 1
+}
+
+### Participate in Evet in the future
+POST http://localhost:5000/api/eventparticipation/participate
+Content-Type: application/json
+
+{
+  "Eventid": 2,
+  "UserId": 1
+}
+
+### Cancel Partcipation tat im not attending (or is in the past)
+DELETE http://localhost:5000/api/eventparticipation/
+Content-Type: application/json
+
+{
+  "Eventid": 1,
+  "UserId": 1
+}
+
+### Cancl Participation that im attending
+DELETE http://localhost:5000/api/eventparticipation/
+Content-Type: application/json
+
+{
+  "Eventid": 2,
+  "UserId": 1
+}
+
+### Get Participation Status for event im attending
+GET http://localhost:5000/api/eventparticipation/status/5
