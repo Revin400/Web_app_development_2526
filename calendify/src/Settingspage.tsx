@@ -1,5 +1,5 @@
 import "./Settingspage.css";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type ModalType = "password" | "email" | "notifications" | null;
@@ -37,6 +37,23 @@ const SettingsPage = () => {
     }
   };
 
+  useEffect(() => {
+    GetLoggedInUser();
+  }, []);
+
+
+  const HandleLogOut = async () => {
+    try {
+      await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      navigate("/");
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+  };
+
 
   const handleSaveEmail = () => {
     if (!email || email !== emailConfirm) return;
@@ -56,14 +73,16 @@ const SettingsPage = () => {
   };
 
 
-  const GetLoggedInUser = () => {
+  const GetLoggedInUser =  async () => {
     try {
       const user = fetch("http://localhost:5000/api/Auth/session", {
+        credentials: "include",
         method: "GET",
       });
-      setLoggedInUser(user);
-
-
+      
+      const userData = await user.then(res => res.json());
+      setLoggedInUser(userData);
+      
     } catch (err) {
       console.error(err);
     }
@@ -72,12 +91,11 @@ const SettingsPage = () => {
 
 
   const handleSavePassword = async (e: React.FormEvent) => {
-    GetLoggedInUser();
     e.preventDefault();
     try {
       
 
-      const res = await fetch("http://localhost:5000/api/Employee/2/change-password", {
+      const res = await fetch(`http://localhost:5000/api/Employee/${loggedInUser?.userId}/change-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,7 +110,7 @@ const SettingsPage = () => {
     setConfirmPassword("");
     closeModal();
   } 
-  alert(`Wachtwoord succesvol gewijzigd. ${loggedInUser}`);
+  alert(`Wachtwoord succesvol gewijzigd.`);
 
   } catch (err) {
       console.error(err);
@@ -103,11 +121,11 @@ const SettingsPage = () => {
   return (
     <div className="settings-page">
       <div className="settings-sidebar">
-        <a onClick={() => navigate("/settings")}>My Settings</a>
+        <a onClick={() => navigate("/settings")}>My Settings </a>
         <a onClick={() => navigate("/calendar")}>My Reminders</a>
         <a onClick={() => navigate("#")}>Appearance</a>
         <a onClick={() => navigate("/new-Reminders")}>New Reminders</a>
-        <a onClick={() => navigate("/")}>Log Out</a>
+        <a onClick={() => HandleLogOut()}>Log Out</a>
       </div>
 
       <div className="settings-content">
