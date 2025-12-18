@@ -100,6 +100,14 @@ namespace server.Migrations
                             Name = "System Administrator",
                             Password = "admin123",
                             Role = "Admin"
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            Email = "test@test.com",
+                            Name = "Test Employee",
+                            Password = "employee123",
+                            Role = "Employee"
                         });
                 });
 
@@ -129,6 +137,25 @@ namespace server.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("Server.Models.EventParticipation", b =>
+                {
+                    b.Property<int>("EventId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("EventId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EventParticipations");
+                });
+
             modelBuilder.Entity("Server.Models.RoomBooking", b =>
                 {
                     b.Property<int>("Id")
@@ -151,9 +178,8 @@ namespace server.Migrations
                     b.Property<TimeSpan>("StartTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -169,6 +195,35 @@ namespace server.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Server.Models.EventParticipation", b =>
+                {
+                    b.HasOne("Server.Models.Event", "Event")
+                        .WithMany("Participants")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Models.Employee", "User")
+                        .WithMany("EventParticipations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Server.Models.Employee", b =>
+                {
+                    b.Navigation("EventParticipations");
+                });
+
+            modelBuilder.Entity("Server.Models.Event", b =>
+                {
+                    b.Navigation("Participants");
                 });
 #pragma warning restore 612, 618
         }
