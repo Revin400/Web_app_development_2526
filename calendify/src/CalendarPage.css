@@ -185,6 +185,7 @@ body{
   width: 100%;          
   padding: 20px 22px;
   color: var(--bg);
+  max-height: 800px;
 }
 
 

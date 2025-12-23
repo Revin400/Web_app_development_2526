@@ -1,17 +1,23 @@
 import "./CalendarPage.css";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import calendifylogo from "./calendifylogo.png";
 import Profilepic from "./Default_pfp.png";
 import checkmark from "./check-img.png";
 import { useSession } from "./hooks/useSession";
 
+
 const CalendarPage = () => {
+  const location = useLocation();
   const [activeCard, setActiveCard] = React.useState(null);
-  const [activeSegment, setActiveSegment] = React.useState("events");
+  const [activeSegment, setActiveSegment] = React.useState<
+  "Events" | "My Events"
+>(() => {
+  return location.state?.activeSegment ?? "Events";
+});
   const navigate = useNavigate();
   const { userId, role, loading, isLoggedIn, name } = useSession();
-  const [events, setEvents] = React.useState<EventType[]>([]);
+  const [Events, setEvents] = React.useState<EventType[]>([]);
   const [selectedEvent, setSelectedEvent] = React.useState<EventType | null>(
     null
   );
@@ -25,6 +31,7 @@ const CalendarPage = () => {
   >(null);
 
   const [MyEvents, setMyEvents] = useState<EventType[]>([]);
+
 
 useEffect(() => {
   setSelectedEvent(null);
@@ -49,17 +56,17 @@ useEffect(() => {
   useEffect(() => {
   
     fetchMyEvents();
-    fetch("http://localhost:5000/api/events", {
+    fetch("http://localhost:5000/api/Events", {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
         setEvents(data);
       })
-      .catch(() => console.log("Failed to load events"));
+      .catch(() => console.log("Failed to load Events"));
   }, []);
 
-  const eventsDays = events.map((e) => {
+  const EventsDays = Events.map((e) => {
     const date = new Date(e.eventDate);
     const day = date.getDate();
     const weekday = date
@@ -76,13 +83,13 @@ useEffect(() => {
   const fetchMyEvents = async () => {
     try {
       const res = await fetch(
-        "http://localhost:5000/api/eventparticipation/myevents",
+        "http://localhost:5000/api/eventparticipation/myEvents",
         { credentials: "include" }
       );
       const data = await res.json();
       setMyEvents(data);
     } catch (error) {
-      console.error("Error fetching my events:", error);
+      console.error("Error fetching my Events:", error);
     }
   };
 
@@ -114,6 +121,7 @@ useEffect(() => {
       setParticipationStatus("Attending");
 
       fetchParticipationStatus(eventId);
+      fetchMyEvents();
     } catch {
       setPopupType("error");
       setPopupMessage("Network error");
@@ -145,6 +153,8 @@ useEffect(() => {
       setParticipationStatus("Not attending");
 
       fetchParticipationStatus(eventId);
+      fetchMyEvents();
+      setActiveSegment("Events");
     } catch {
       setPopupType("error");
       setPopupMessage("Network error");
@@ -196,12 +206,12 @@ useEffect(() => {
             <button
               type="button"
               role="tab"
-              aria-selected={activeSegment === "events"}
-              className={`seg-btn ${activeSegment === "events" ? "is-active" : ""
+              aria-selected={activeSegment === "Events"}
+              className={`seg-btn ${activeSegment === "Events" ? "is-active" : ""
                 }`}
-              onClick={() => setActiveSegment("events")}
+              onClick={() => setActiveSegment("Events")}
             >
-              events
+              Events
             </button>
             <button
               type="button"
@@ -250,8 +260,8 @@ useEffect(() => {
           )}
         </div>
         <div className="cards">
-          {activeSegment === "events" &&
-            eventsDays.map(({ id, day, weekday, fullEvent }) => (
+          {activeSegment === "Events" &&
+            EventsDays.map(({ id, day, weekday, fullEvent }) => (
               <button
                 key={id}
                 className={`card card-btn${selectedEvent?.id === id ? " is-active" : ""
