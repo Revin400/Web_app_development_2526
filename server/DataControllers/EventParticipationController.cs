@@ -76,4 +76,16 @@ public class EventParticipationController(IEventParticipationService service) : 
         return Ok(new { status });
     }
 
+    [HttpGet("myevents")]
+    public async Task<IActionResult> GetUserEvents()
+    {
+        var userId = HttpContext.Session.GetInt32("UserId");
+
+        if (userId == null)
+            return Unauthorized();
+
+        var events = await service.GetUserEventsAsync(userId.Value);
+        return Ok(events);
+    }
+
 }

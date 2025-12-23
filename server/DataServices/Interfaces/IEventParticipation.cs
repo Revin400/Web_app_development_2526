@@ -8,4 +8,5 @@ public interface IEventParticipationService
     Task<Event> ParticipateInEventAsync(int eventId, int userId);
     Task<List<ParticipateResponse>> RemoveParticipationAsync(int eventId, int userId);
     Task<string> GetParticipationStatusAsync(int eventId, int userId);
+    Task<List<Event>> GetUserEventsAsync(int userId);
 }
