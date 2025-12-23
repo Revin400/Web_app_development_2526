@@ -10,7 +10,7 @@ const SettingsPage = () => {
 
   const [activeModal, setActiveModal] = useState<ModalType>(null);
 
-  // simpele form states (later kun je dit koppelen aan je backend)
+ 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -56,24 +56,14 @@ const SettingsPage = () => {
   };
 
 
-  const handleSaveEmail = () => {
-    if (!email || email !== emailConfirm) return;
-
-    // TODO: call API endpoint
-    console.log("Save email", { email });
-
-    setEmail("");
-    setEmailConfirm("");
-    closeModal();
-  };
-
+  
   const handleSaveNotifications = () => {
     // TODO: call API endpoint
     console.log("Save notifications", { notifEmail, notifInApp });
     closeModal();
   };
-
-
+  
+  
   const GetLoggedInUser =  async () => {
     try {
       const user = fetch("http://localhost:5000/api/Auth/session", {
@@ -88,8 +78,33 @@ const SettingsPage = () => {
       console.error(err);
     }
   };
+  
+  
+  const handleSaveEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+     if (!email || email !== emailConfirm) return;
+    try {
+      const res = await fetch(`http://localhost:5000/api/Employee/${loggedInUser?.userId}/change-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"oldEmail": loggedInUser?.email, "newEmail": email }),
+      });
+
+      if (res.ok) {
+    setEmail("");
+    setEmailConfirm("");
+    closeModal();
+    alert("Email succesvol gewijzigd.");
+
+  }
 
 
+  } catch (err) {
+      console.error(err);
+    }
+  }
 
   const handleSavePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -321,7 +336,7 @@ const SettingsPage = () => {
             <div className="settings-modal-body">
               <div className="settings-form-grid">
                 <div className="settings-form-row full">
-                  <span className="settings-form-label">Nieuw e-mailadres</span>
+                  <span className="settings-form-label">oude e-mailadres</span>
                   <input
                     className="settings-input"
                     type="email"
@@ -332,7 +347,7 @@ const SettingsPage = () => {
                 </div>
 
                 <div className="settings-form-row full">
-                  <span className="settings-form-label">Bevestig e-mailadres</span>
+                  <span className="settings-form-label">nieuw e-mailadres</span>
                   <input
                     className="settings-input"
                     type="email"

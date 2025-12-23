@@ -53,6 +53,29 @@ public class EmployeeController(IEmployeeService service) : ControllerBase
     }
 
 
+    [HttpPost("{userId}/change-email")]
+    public async Task<ActionResult> ChangeEmail(int userId, [FromBody] ChangeEmailRequest request)
+    {
+        if (string.IsNullOrEmpty(request.OldEmail) || string.IsNullOrEmpty(request.NewEmail))
+            return BadRequest("Old email and new email are required");
+
+        var success = await service.ChangeEmailAsync(userId, request.OldEmail, request.NewEmail);
+        if (!success)
+            return BadRequest("Old email is incorrect or employee not found");
+
+        return Ok("Email changed successfully");
+    }
+
+
+    public class ChangeEmailRequest
+    {
+        public string OldEmail { get; set; }
+        public string NewEmail { get; set; }
+        
+    }
+
+    
+
     // [HttpDelete("{employee_id}")]
     // public async Task<ActionResult> DeleteEmployee(int employee_id)
     // {

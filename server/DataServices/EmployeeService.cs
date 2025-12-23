@@ -50,6 +50,22 @@ public class EmployeeService(ApplicationDbContext db) : IEmployeeService
         return true;
     }
 
+    public async Task<bool> ChangeEmailAsync(int userId, string oldEmail, string newEmail)
+    {
+        var employee = await GetByIdAsync(userId);
+        if (employee == null)
+            return false;
+
+        // Verify old email matches
+        if (employee.Email != oldEmail)
+            return false;
+
+        // Update to new email
+        employee.Email = newEmail;
+        await db.SaveChangesAsync();
+        return true;
+    }
+
 
 
 

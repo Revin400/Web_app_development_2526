@@ -11,6 +11,8 @@ public class Employee
 
     public string Password { get; set; }
 
+    // public string Email { get; set; } 
+
     public ICollection<EventParticipation> EventParticipations { get; set; }
         = new List<EventParticipation>();
 }

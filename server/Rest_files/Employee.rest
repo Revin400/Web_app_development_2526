@@ -49,6 +49,14 @@ Content-Type: application/json
   "newPassword": "newPassword4586"
 }
 
+### Change Email adresss
+POST http://localhost:5000/api/Employee/2/change-email
+Content-Type: application/json
+
+{
+  "oldEmail": "newemail@test.com",
+  "newEmail": "test@test.com"
+} 
 
 
 ### Get current employee (me)
