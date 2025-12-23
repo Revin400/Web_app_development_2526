@@ -8,4 +8,6 @@ using System.Collections.Generic;
         Task<Event> CreateEventAsync(Event newEvent);
         Task<Event> UpdateEventAsync(Event updatedEvent);
         Task<bool> DeleteEventAsync(int eventId);
+
+        
     }
