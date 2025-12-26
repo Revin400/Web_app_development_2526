@@ -1,0 +1,99 @@
+### Email verzenden naar specifiek email adres
+POST http://localhost:5000/api/admin/send-email
+Content-Type: application/json
+
+{
+  "toEmail": "gavinrenardus@gmail.com",
+  "subject": "Test Email",
+  "body": "<h1>Hallo!</h1><p>Dit is een test email vanuit Calendify.</p>"
+}
+
+###
+
+### Email verzenden naar werknemer via ID
+POST http://localhost:5000/api/admin/send-email-to-employee/1
+Content-Type: application/json
+
+{
+  "subject": "Belangrijke Melding",
+  "body": "<h1>Beste werknemer,</h1><p>Dit is een belangrijke melding over een aankomend evenement.</p>"
+}
+
+###
+
+### Email verzenden naar meerdere werknemers
+POST http://localhost:5000/api/admin/send-email-to-multiple
+Content-Type: application/json
+
+{
+  "employeeIds": [1, 2, 3],
+  "subject": "Team Aankondiging",
+  "body": "<h1>Team Update</h1><p>Beste team, we hebben een belangrijke aankondiging.</p>"
+}
+
+###
+
+### Email met Welcome Template
+POST http://localhost:5000/api/admin/send-template-email
+Content-Type: application/json
+
+{
+  "toEmail": "gavinrenardus@gmail.com",
+  "subject": "Welkom bij Calendify!",
+  "templateName": "WelcomeEmail",
+  "templateData": {
+    "Name": "Gavin"
+  }
+}
+
+###
+
+### Email met Event Notification Template naar werknemer
+POST http://localhost:5000/api/admin/send-template-email-to-employee/1
+Content-Type: application/json
+
+{
+  "subject": "Nieuwe Evenement Uitnodiging",
+  "templateName": "EventNotification",
+  "templateData": {
+    "EventTitle": "Team Meeting",
+    "EventDate": "15 Januari 2025",
+    "EventTime": "14:00 - 15:00",
+    "EventLocation": "Vergaderzaal A",
+    "EventDescription": "Maandelijkse team meeting om de voortgang te bespreken"
+  }
+}
+
+###
+
+### Email met Reminder Template
+POST http://localhost:5000/api/admin/send-template-email
+Content-Type: application/json
+
+{
+  "toEmail": "gavinrenardus@gmail.com",
+  "subject": "Herinnering: Aankomende Afspraak",
+  "templateName": "ReminderEmail",
+  "templateData": {
+    "Name": "Gavin",
+    "ReminderTitle": "Team Meeting morgen",
+    "ReminderMessage": "Vergeet niet dat we morgen om 14:00 een team meeting hebben in vergaderzaal A."
+  }
+}
+
+###
+
+### Email met Custom Template
+POST http://localhost:5000/api/admin/send-template-email-to-employee/1
+Content-Type: application/json
+
+{
+  "subject": "Belangrijke Mededeling",
+  "templateName": "CustomEmail",
+  "templateData": {
+    "Title": "Belangrijke Update",
+    "Message": "<p>We willen je informeren over enkele belangrijke wijzigingen in het systeem.</p><ul><li>Nieuwe functionaliteit toegevoegd</li><li>Verbeterde gebruikerservaring</li><li>Bug fixes</li></ul>"
+  }
+}
+
+###
