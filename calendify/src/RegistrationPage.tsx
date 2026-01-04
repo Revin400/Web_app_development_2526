@@ -8,6 +8,7 @@ const RegistrationPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleRegistration = async (e: React.FormEvent) => {
@@ -21,7 +22,7 @@ const RegistrationPage: React.FC = () => {
         },
         body: JSON.stringify({ name, email, password }),
       });
-
+ 
       if (!res.ok) {
         const err = await res.json().catch(() => null);
         setError(err?.message || "Unknown error occurred.");
@@ -29,7 +30,11 @@ const RegistrationPage: React.FC = () => {
       }
 
       const data = await res.json();
-      navigate("/calendar");
+      setSuccess("Registratie voltooid! We hebben je een bevestigingsmail gestuurd. Je wordt zo doorgestuurd...");
+      setName("");
+      setEmail("");
+      setPassword("");
+      setTimeout(() => navigate("/calendar"), 1200);
     } catch (err) {
       console.error(err);
       setError("Cannot connect to the server.");
@@ -73,6 +78,7 @@ const RegistrationPage: React.FC = () => {
             required
           />       
           {error && <p className="error-text">{error}</p>}
+          {success && <p className="success-text">{success}</p>}
 
           <button type="submit" className="registration-button">
             Register

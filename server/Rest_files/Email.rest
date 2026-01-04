@@ -49,7 +49,7 @@ Content-Type: application/json
 ###
 
 ### Email met Event Notification Template naar werknemer
-POST http://localhost:5000/api/admin/send-template-email-to-employee/1
+POST http://localhost:5000/api/admin/send-template-email-to-employee/5
 Content-Type: application/json
 
 {

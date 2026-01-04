@@ -90,3 +90,12 @@ body, html {
   text-align: center;
   font-weight: bold;
 }
+
+.success-text {
+  color: #0f5132; /* dark green */
+  background: #d1e7dd; /* light green background */
+  border-radius: var(--pill);
+  padding: 10px 14px;
+  text-align: center;
+  font-weight: 600;
+}
