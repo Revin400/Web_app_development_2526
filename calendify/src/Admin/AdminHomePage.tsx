@@ -2,6 +2,8 @@ import React, { useEffect, useState, FormEvent, ChangeEvent, FC } from "react";
 import "./AdminHomePage.css";
 import arrow from "../arrow.png";
 import { useNavigate } from "react-router-dom";
+import { useSession } from "../hooks/useSession";
+
 
 const API_BASE = "http://localhost:5000/api/events";
 
@@ -26,7 +28,8 @@ const AdminHomePage: FC = () => {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-  
+  const { isLoggedIn, role, loading: sessionLoading } = useSession();
+
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formValues, setFormValues] = useState<EventItem>(emptyForm);
@@ -43,6 +46,33 @@ const AdminHomePage: FC = () => {
     const date = new Date(dateTimeStr);
     return date.toTimeString().split(' ')[0];
     };
+
+  const HandleLogout = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      if (response.ok) {
+        navigate("/login");
+      }
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (!loading) {
+          if (!isLoggedIn) {
+            navigate("/login");
+          }
+
+          if (role !== "Admin") {
+            navigate("/calendar");
+          }
+          loadEvents();
+        }
+      }, [isLoggedIn, role, loading, navigate]);
 
   // load events
   const loadEvents = async () => {
@@ -67,9 +97,7 @@ const AdminHomePage: FC = () => {
     }
   };
   
-  useEffect(() => {
-    loadEvents();
-  }, []);
+
   
   // delete
   const handleDelete = async (id: number) => {

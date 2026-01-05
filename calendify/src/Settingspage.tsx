@@ -138,8 +138,8 @@ const SettingsPage = () => {
   return (
     <div className="settings-page">
       <div className="settings-sidebar">
-        <a onClick={() => navigate("#")}>Change Password </a>
-        <a onClick={() => navigate("#")}>Change Email</a>
+        <a onClick={() => setActiveModal("password")}>Change Password </a>    
+        <a onClick={() => setActiveModal("email")}>Change Email</a>
         <a onClick={() => HandleLogOut()}>Log Out</a>
       </div>
 
@@ -216,15 +216,15 @@ const SettingsPage = () => {
               <div className="settings-right-content">
                 <h3>Account Settings</h3>
                 <p style={{ marginTop: 12, opacity: 0.85 }}>
-                  Open een item links om instellingen te wijzigen (password, email, notifications).
+                  Open an item on the left to change settings (password, email, notifications).
                 </p>
 
                 <div style={{ marginTop: 18, display: "flex", gap: 10, flexWrap: "wrap" }}>
                   <button className="settings-btn settings-btn-primary" onClick={() => setActiveModal("password")}>
-                    Wachtwoord wijzigen
+                    Change Password
                   </button>
                   <button className="settings-btn settings-btn-primary" onClick={() => setActiveModal("email")}>
-                    E-mail wijzigen
+                    Change E-mail
                   </button>
                   <button className="settings-btn settings-btn-primary" onClick={() => setActiveModal("notifications")}>
                     Notifications
@@ -235,9 +235,7 @@ const SettingsPage = () => {
           </div>
         </div>
 
-        {/* =========================
-            MODALS
-           ========================= */}
+        
 
         {/* Password modal */}
         <div
@@ -247,7 +245,7 @@ const SettingsPage = () => {
         >
           <div className="settings-modal" role="dialog" aria-modal="true">
             <div className="settings-modal-header">
-              <h3 className="settings-modal-title">Wachtwoord wijzigen</h3>
+              <h3 className="settings-modal-title">Change Password</h3>
               <button className="settings-modal-close" onClick={closeModal}>
                 ✕
               </button>
@@ -256,7 +254,7 @@ const SettingsPage = () => {
             <div className="settings-modal-body">
               <div className="settings-form-grid">
                 <div className="settings-form-row full">
-                  <span className="settings-form-label">Huidig wachtwoord</span>
+                  <span className="settings-form-label">Current Password</span>
                   <input
                     className="settings-input"
                     type="password"
@@ -335,7 +333,7 @@ const SettingsPage = () => {
             <div className="settings-modal-body">
               <div className="settings-form-grid">
                 <div className="settings-form-row full">
-                  <span className="settings-form-label">oude e-mailadres</span>
+                  <span className="settings-form-label">old e-mailadres</span>
                   <input
                     className="settings-input"
                     type="email"
@@ -346,7 +344,7 @@ const SettingsPage = () => {
                 </div>
 
                 <div className="settings-form-row full">
-                  <span className="settings-form-label">nieuw e-mailadres</span>
+                  <span className="settings-form-label">new e-mailadres</span>
                   <input
                     className="settings-input"
                     type="email"
@@ -357,7 +355,7 @@ const SettingsPage = () => {
                 </div>
 
                 <div className="settings-form-row re full">
-                  <span className="settings-form-label">email bevestigen</span>
+                  <span className="settings-form-label">confirm e-mail</span>
                   <input
                     className="settings-input"
                     type="email"
@@ -416,8 +414,8 @@ const SettingsPage = () => {
               <div className="settings-form-row" style={{ gap: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
                   <div>
-                    <div style={{ fontWeight: 800 }}>E-mail notificaties</div>
-                    <div style={{ opacity: 0.85, fontSize: 14 }}>Ontvang updates via e-mail.</div>
+                    <div style={{ fontWeight: 800 }}>E-mail notifications</div>
+                    <div style={{ opacity: 0.85, fontSize: 14 }}>Receive updates via e-mail.</div>
                   </div>
                   <input
                     type="checkbox"
@@ -441,12 +439,12 @@ const SettingsPage = () => {
                 </div>
               </div>
 
-              <div className="settings-helper">Klik “Opslaan” om je voorkeuren te bewaren.</div>
+              <div className="settings-helper">click "Save" to save your preferences.</div>
             </div>
 
             <div className="settings-modal-footer">
               <button className="settings-btn settings-btn-ghost" onClick={closeModal}>
-                Annuleren
+                Cancel
               </button>
               <button className="settings-btn settings-btn-primary" onClick={handleSaveNotifications}>
                 Opslaan

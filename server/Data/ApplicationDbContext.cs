@@ -16,6 +16,10 @@ public class ApplicationDbContext : DbContext
     public DbSet<RoomBooking> RoomBookings { get; set; }
     public DbSet<OfficeAttendance> OfficeAttendances { get; set; }
     public DbSet<EventParticipation> EventParticipations { get; set; }
+    
+    public DbSet<Group> Groups { get; set; }
+
+    public DbSet<GroupMembership> GroupMemberships { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -70,6 +74,17 @@ public class ApplicationDbContext : DbContext
             .HasOne(ep => ep.User)
             .WithMany(u => u.EventParticipations)
             .HasForeignKey(ep => ep.UserId);
+
+        modelBuilder.Entity<GroupMembership>(entity =>
+        {
+            entity.ToTable("groupmemberships"); 
+            entity.HasKey(x => new { x.userId, x.GroupId });
+
+            entity.HasOne(x => x.group)
+                .WithMany(g => g.GroupMemberships)
+                .HasForeignKey(x => x.GroupId);
+
+        });
     }
 
 

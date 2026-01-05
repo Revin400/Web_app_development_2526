@@ -19,7 +19,8 @@ builder.Services.AddScoped<IOfficeAttendanceService, OfficeAttendanceService>();
 builder.Services.AddScoped<IRoomBookingService, RoomBookingService>();
 builder.Services.AddScoped<IEventParticipationService, EventParticipationService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-
+builder.Services.AddScoped<IGroupService, GroupService>();
+builder.Services.AddScoped<IGroupMembershipService, GroupMembershipService>();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();

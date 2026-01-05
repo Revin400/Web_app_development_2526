@@ -1,0 +1,13 @@
+@baseUrl = https://localhost:5000/
+
+Add user to group (creates membership)
+POST {{baseUrl}}/api/groupmemberships/users/1/groups/2
+
+Remove user from group (deletes membership)
+DELETE {{baseUrl}}/api/groupmemberships/users/1/groups/2
+
+Get all group IDs for a user
+GET {{baseUrl}}/api/groupmemberships/users/1/groups
+
+Get all user IDs for a group
+GET {{baseUrl}}/api/groupmemberships/groups/2/users

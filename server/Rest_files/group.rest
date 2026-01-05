@@ -1,0 +1,30 @@
+@baseUrl = http://localhost:5000
+@contentType = application/json
+
+### Get all groups
+GET {{baseUrl}}/api/group
+
+### Get group by id
+GET {{baseUrl}}/api/group/5
+
+### Create group
+POST {{baseUrl}}/api/group
+Content-Type: {{contentType}}
+
+{
+  
+  "Name": "Engineering",
+  "description": "Engineering team"
+}
+
+### Update group
+PUT {{baseUrl}}/api/group/1
+Content-Type: {{contentType}}
+
+{
+  "Name": "Engineering (Updated)",
+  "description": "Updated description"
+}
+
+### Delete group
+DELETE {{baseUrl}}/api/group/3
