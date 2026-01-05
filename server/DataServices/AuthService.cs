@@ -1,8 +1,7 @@
-using System.Security.Cryptography.Xml;
 using Microsoft.EntityFrameworkCore;
 using Server.Data;
 using Server.Models;
-    using Server.Services.Interfaces;
+using Server.Services.Interfaces;
 
 namespace Server.Services;
 
@@ -11,10 +10,13 @@ public class AuthService: IAuthService
 
     private readonly ApplicationDbContext _db;
     private readonly IHttpContextAccessor _http;
-    public AuthService(ApplicationDbContext db, IHttpContextAccessor http)
+    private readonly IEmailService _emailService;
+
+    public AuthService(ApplicationDbContext db, IHttpContextAccessor http, IEmailService emailService)
     {
         _db = db;
         _http = http;
+        _emailService = emailService;
     } 
 
 public async Task<Employee?> LoginAsync(string email, string password)
@@ -90,6 +92,24 @@ public async Task<Employee?> LoginAsync(string email, string password)
         _http.HttpContext!.Session.SetInt32("UserId", newEmployee.UserId);
         _http.HttpContext.Session.SetString("UserName", name);
         _http.HttpContext.Session.SetString("Role", "Employee");
+
+        // Probeer een welkomstmail te versturen (niet-blokkerend voor registratie)
+        try
+        {
+            await _emailService.SendEmailWithTemplateAsync(
+                newEmployee.Email,
+                "Welkom bij Calendify",
+                "WelcomeEmail",
+                new Dictionary<string, string>
+                {
+                    { "Name", name }
+                }
+            );
+        }
+        catch
+        {
+            // Email fouten worden gelogd in EmailService; registratie blijft succesvol
+        }
     }
 
     public (bool isLoggedIn, string? name, string? role) CheckSession()

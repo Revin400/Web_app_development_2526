@@ -37,7 +37,7 @@ Content-Type: application/json
 
 ### Delete Employee
 ### kan niet want je bent geen admin!!!
-DELETE http://localhost:5000/api/Employee/1
+DELETE http://localhost:5000/api/Employee/4
 
 
 ### Change Password
@@ -45,10 +45,18 @@ POST http://localhost:5000/api/Employee/2/change-password
 Content-Type: application/json
 
 {
-  "oldPassword": "test123",
-  "newPassword": "newPassword456"
+  "oldPassword": "newPassword456",
+  "newPassword": "newPassword4586"
 }
 
+### Change Email adresss
+POST http://localhost:5000/api/Employee/3/change-email
+Content-Type: application/json
+
+{
+  "oldEmail": "m@m.com",
+  "newEmail": "test123@test.com"
+} 
 
 
 ### Get current employee (me)

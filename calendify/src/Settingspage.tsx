@@ -1,5 +1,6 @@
 import "./Settingspage.css";
-import { useMemo, useState } from "react";
+import React from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import React from "react"
 type ModalType = "password" | "email" | "notifications" | null;
@@ -9,16 +10,18 @@ const SettingsPage = () => {
 
   const [activeModal, setActiveModal] = useState<ModalType>(null);
 
-  // simpele form states (later kun je dit koppelen aan je backend)
+ 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [email, setEmail] = useState("");
   const [emailConfirm, setEmailConfirm] = useState("");
+ const [emailConfirm1, setEmailConfirm1] = useState("");
 
   const [notifEmail, setNotifEmail] = useState(true);
   const [notifInApp, setNotifInApp] = useState(true);
+  const [loggedInUser, setLoggedInUser] = useState<any>(null);
 
   const passwordError = useMemo(() => {
     if (!newPassword && !confirmPassword) return "";
@@ -36,44 +39,108 @@ const SettingsPage = () => {
     }
   };
 
-  const handleSavePassword = () => {
-    if (passwordError) return;
+  useEffect(() => {
+    GetLoggedInUser();
+  }, []);
 
-    // TODO: call API endpoint
-    console.log("Save password", { currentPassword, newPassword });
 
-    // reset & close
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    closeModal();
+  const HandleLogOut = async () => {
+    try {
+      await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      navigate("/");
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
   };
 
-  const handleSaveEmail = () => {
-    if (!email || email !== emailConfirm) return;
 
-    // TODO: call API endpoint
-    console.log("Save email", { email });
-
-    setEmail("");
-    setEmailConfirm("");
-    closeModal();
-  };
-
+  
   const handleSaveNotifications = () => {
     // TODO: call API endpoint
     console.log("Save notifications", { notifEmail, notifInApp });
     closeModal();
   };
+  
+  
+  const GetLoggedInUser =  async () => {
+    try {
+      const user = fetch("http://localhost:5000/api/Auth/session", {
+        credentials: "include",
+        method: "GET",
+      });
+      
+      const userData = await user.then(res => res.json());
+      setLoggedInUser(userData);
+      
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
+  
+  const handleSaveEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+     if (!email || email !== emailConfirm) return;
+    try {
+      const res = await fetch(`http://localhost:5000/api/Employee/${loggedInUser?.userId}/change-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"oldEmail": loggedInUser?.email, "newEmail": email }),
+      });
+
+      if (res.ok) {
+    setEmail("");
+    setEmailConfirm("");
+    closeModal();
+    alert("Email succesvol gewijzigd.");
+
+  }
+
+
+  } catch (err) {
+      console.error(err);
+    }
+  }
+
+  const handleSavePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      
+
+      const res = await fetch(`http://localhost:5000/api/Employee/${loggedInUser?.userId}/change-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"oldPassword": currentPassword, "newPassword": newPassword }),
+      });
+
+      if (res.ok) {
+            // reset & close
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    closeModal();
+  } 
+  alert(`Wachtwoord succesvol gewijzigd.`);
+
+  } catch (err) {
+      console.error(err);
+    }
+  }
+
 
   return (
     <div className="settings-page">
       <div className="settings-sidebar">
-        <a onClick={() => navigate("/settings")}>My Settings</a>
-        <a onClick={() => navigate("/calendar")}>My Reminders</a>
-        <a onClick={() => navigate("#")}>Appearance</a>
-        <a onClick={() => navigate("/new-Reminders")}>New Reminders</a>
-        <a onClick={() => navigate("/")}>Log Out</a>
+        <a onClick={() => navigate("#")}>Change Password </a>
+        <a onClick={() => navigate("#")}>Change Email</a>
+        <a onClick={() => HandleLogOut()}>Log Out</a>
       </div>
 
       <div className="settings-content">
@@ -268,7 +335,7 @@ const SettingsPage = () => {
             <div className="settings-modal-body">
               <div className="settings-form-grid">
                 <div className="settings-form-row full">
-                  <span className="settings-form-label">Nieuw e-mailadres</span>
+                  <span className="settings-form-label">oude e-mailadres</span>
                   <input
                     className="settings-input"
                     type="email"
@@ -279,7 +346,7 @@ const SettingsPage = () => {
                 </div>
 
                 <div className="settings-form-row full">
-                  <span className="settings-form-label">Bevestig e-mailadres</span>
+                  <span className="settings-form-label">nieuw e-mailadres</span>
                   <input
                     className="settings-input"
                     type="email"
@@ -288,15 +355,28 @@ const SettingsPage = () => {
                     placeholder="name@example.com"
                   />
                 </div>
-              </div>
 
-              {email && emailConfirm && email !== emailConfirm ? (
+                <div className="settings-form-row re full">
+                  <span className="settings-form-label">email bevestigen</span>
+                  <input
+                    className="settings-input"
+                    type="email"
+                    value={emailConfirm1}
+                    onChange={(e) => setEmailConfirm1(e.target.value)}
+                    placeholder="name@example.com"
+                  />
+                </div>
+
+              </div>
+              
+
+                {emailConfirm && emailConfirm1 && emailConfirm !== emailConfirm1 ? (
                 <div className="settings-helper" style={{ color: "#ffcfbd" }}>
                   E-mailadressen komen niet overeen.
                 </div>
-              ) : (
+                ) : (
                 <div className="settings-helper">Je krijgt eventueel een bevestigingsmail (als je dat zo instelt).</div>
-              )}
+                )}
             </div>
 
             <div className="settings-modal-footer">
@@ -307,10 +387,10 @@ const SettingsPage = () => {
                 className="settings-btn settings-btn-primary"
                 onClick={handleSaveEmail}
                 disabled={!email || email !== emailConfirm}
-                style={{
-                  opacity: !email || email !== emailConfirm ? 0.55 : 1,
-                  cursor: !email || email !== emailConfirm ? "not-allowed" : "pointer",
-                }}
+                // style={{
+                //   opacity: !email || email !== emailConfirm ? 0.55 : 1,
+                //   cursor: !email || email !== emailConfirm ? "not-allowed" : "pointer",
+                // }}
               >
                 Opslaan
               </button>

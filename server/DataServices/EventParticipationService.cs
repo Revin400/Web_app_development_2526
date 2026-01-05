@@ -105,7 +105,20 @@ public class EventParticipationService : IEventParticipationService
                 ep.EventId == eventId &&
                 ep.UserId == userId);
 
-        return participation.Status;
+        return participation == null
+            ? "Not attending"
+            : participation.Status;
+    }
+
+    public async Task<List<Event>> GetUserEventsAsync(int userId)
+    {
+        var events = await db.EventParticipations
+            .Where(ep => ep.UserId == userId)
+            .Include(ep => ep.Event)
+            .Select(ep => ep.Event)
+            .ToListAsync();
+
+        return events;
     }
 }
 

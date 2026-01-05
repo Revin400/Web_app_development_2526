@@ -9,9 +9,16 @@ public interface IEmployeeService
 
     Task <Employee> EditEmployeeAsync(Employee employee);
 
-    // Task<Employee> GetByIdAsync(Employee employee);
+    
 
-    // i want to be able to change my own password
+    
     Task<bool> ChangePasswordAsync(int userId, string oldPassword, string newPassword);
+
+    // change email adress
+    Task<bool> ChangeEmailAsync(int userId, string oldEmail, string newEmail);
+
+  
+    
+
     
 }

@@ -18,6 +18,7 @@ builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IOfficeAttendanceService, OfficeAttendanceService>();
 builder.Services.AddScoped<IRoomBookingService, RoomBookingService>();
 builder.Services.AddScoped<IEventParticipationService, EventParticipationService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 builder.Services.AddDistributedMemoryCache();

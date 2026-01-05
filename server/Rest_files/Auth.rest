@@ -15,6 +15,15 @@ Content-Type: application/json
   "password": "employee123"
 }
 
+### login user
+POST http://localhost:5000/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "admin123"
+}
+
 ### Check Session
 GET http://localhost:5000/api/Auth/session
 
@@ -30,3 +39,6 @@ Content-Type: application/json
 
 ### Logout
 POST http://localhost:5000/api/Auth/logout
+
+### Delete Employee
+DELETE http://localhost:5000/api/Auth/Employee/4

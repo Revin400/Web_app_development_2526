@@ -17,10 +17,47 @@ body{
   font-size: 23px;
   }
 
+.calendar-month {
+  margin: 24px 0 12px;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--card);
+}
+
+
+
 .profile-container {
   position: relative;
   display: inline-block;
 }
+
+.month-selector label {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--card);
+  display: flex;
+  align-items: center;
+   margin-bottom: 32px;
+}
+
+.month-selector select {
+  appearance: none;
+  background-color: var(--card);
+  color: var(--bg);
+  border-radius: var(--pill);
+  padding: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+
+.month-selector select:focus {
+  outline:none;
+  outline-offset: 0px;
+}
+
 
 .profile-pic {
   width: 80px;
@@ -151,11 +188,10 @@ body{
   }
 }
 
-.cards{
-  display:flex;
-  flex-direction:column;
-  gap:22px;
-  
+.cards {
+  gap: 22px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
 }
 
 .card{
@@ -185,6 +221,7 @@ body{
   width: 100%;          
   padding: 20px 22px;
   color: var(--bg);
+  max-height: 800px;
 }
 
 

@@ -1,17 +1,24 @@
 import "./CalendarPage.css";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import calendifylogo from "./calendifylogo.png";
 import Profilepic from "./Default_pfp.png";
-import checkmark from "./check-img.png";
 import { useSession } from "./hooks/useSession";
+import { EventType } from "./types/EventType";
+import { EventCard } from "./EventCard";
+import { EventSidebar } from "./EventSidebar";
 
 const CalendarPage = () => {
-  const [activeCard, setActiveCard] = React.useState(null);
-  const [activeSegment, setActiveSegment] = React.useState("events");
+  const location = useLocation();
+  const [selectedMonth, setSelectedMonth] = useState<string>("All");
+  const [activeSegment, setActiveSegment] = React.useState<
+    "Events" | "My Events"
+  >(() => {
+    return location.state?.activeSegment ?? "Events";
+  });
   const navigate = useNavigate();
   const { userId, role, loading, isLoggedIn, name } = useSession();
-  const [events, setEvents] = React.useState<EventType[]>([]);
+  const [Events, setEvents] = React.useState<EventType[]>([]);
   const [selectedEvent, setSelectedEvent] = React.useState<EventType | null>(
     null
   );
@@ -24,15 +31,14 @@ const CalendarPage = () => {
     "Attending" | "Not attending" | null
   >(null);
 
-  
+  const [MyEvents, setMyEvents] = useState<EventType[]>([]);
+  const groupedEvents = groupEventsByMonth(Events);
+  const groupedMyEvents = groupEventsByMonth(MyEvents);
 
-  type EventType = {
-    id: number;
-    title: string;
-    description: string;
-    eventDate: string;
-    createdBy: string;
-  };
+  useEffect(() => {
+    setSelectedEvent(null);
+    setParticipationStatus(null);
+  }, [activeSegment]);
 
   useEffect(() => {
     if (!loading && !isLoggedIn) {
@@ -41,37 +47,29 @@ const CalendarPage = () => {
   }, [isLoggedIn, loading, navigate]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/events", {
+    fetchMyEvents();
+    fetch("http://localhost:5000/api/Events", {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
         setEvents(data);
       })
-      .catch(() => console.log("Failed to load events"));
+      .catch(() => console.log("Failed to load Events"));
   }, []);
 
-  const eventsDays = events.map((e) => {
-    const date = new Date(e.eventDate);
-    const day = date.getDate();
-    const weekday = date
-      .toLocaleDateString("en-US", { weekday: "short" })
-      .toUpperCase();
-
-    return {
-      id: e.id,
-      day,
-      weekday,
-      fullEvent: e,
-    };
-  });
-
-  const remindersDays = [
-    { day: 3, weekday: "WED" },
-    { day: 10, weekday: "WED" },
-    { day: 15, weekday: "MON" },
-    { day: 28, weekday: "SUN" },
-  ];
+  const fetchMyEvents = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:5000/api/eventparticipation/myEvents",
+        { credentials: "include" }
+      );
+      const data = await res.json();
+      setMyEvents(data);
+    } catch (error) {
+      console.error("Error fetching my Events:", error);
+    }
+  };
 
   const HandleEventParticipation = async (eventId: number, userId: number) => {
     if (!userId) return;
@@ -101,6 +99,7 @@ const CalendarPage = () => {
       setParticipationStatus("Attending");
 
       fetchParticipationStatus(eventId);
+      fetchMyEvents();
     } catch {
       setPopupType("error");
       setPopupMessage("Network error");
@@ -132,6 +131,8 @@ const CalendarPage = () => {
       setParticipationStatus("Not attending");
 
       fetchParticipationStatus(eventId);
+      fetchMyEvents();
+      setActiveSegment("Events");
     } catch {
       setPopupType("error");
       setPopupMessage("Network error");
@@ -156,6 +157,39 @@ const CalendarPage = () => {
       setParticipationStatus("Not attending");
     }
   };
+
+  function groupEventsByMonth(events: EventType[]) {
+    return events.reduce<Record<string, EventType[]>>((groups, event) => {
+      const date = new Date(event.eventDate);
+
+      const key = date.toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
+      });
+
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+
+      groups[key].push(event);
+      return groups;
+    }, {});
+  }
+
+  function getAvailableMonths(events: EventType[]) {
+    const months = new Set<string>();
+
+    events.forEach((event) => {
+      const date = new Date(event.eventDate);
+      const label = date.toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
+      });
+      months.add(label);
+    });
+
+    return Array.from(months);
+  }
 
   if (loading) {
     return (
@@ -183,24 +217,24 @@ const CalendarPage = () => {
             <button
               type="button"
               role="tab"
-              aria-selected={activeSegment === "events"}
+              aria-selected={activeSegment === "Events"}
               className={`seg-btn ${
-                activeSegment === "events" ? "is-active" : ""
+                activeSegment === "Events" ? "is-active" : ""
               }`}
-              onClick={() => setActiveSegment("events")}
+              onClick={() => setActiveSegment("Events")}
             >
-              events
+              Events
             </button>
             <button
               type="button"
               role="tab"
-              aria-selected={activeSegment === "reminders"}
+              aria-selected={activeSegment === "My Events"}
               className={`seg-btn ${
-                activeSegment === "reminders" ? "is-active" : ""
+                activeSegment === "My Events" ? "is-active" : ""
               }`}
-              onClick={() => setActiveSegment("reminders")}
+              onClick={() => setActiveSegment("My Events")}
             >
-              reminders
+              My Events
             </button>
           </div>
 
@@ -233,125 +267,102 @@ const CalendarPage = () => {
     Logout
   </button>
 </div>
+            <div className="profile-dropdown">
+              <button onClick={() => navigate("/settings")}>Settings</button>
+              <button
+                onClick={() => {
+                  fetch("http://localhost:5000/api/Auth/logout", {
+                    method: "POST",
+                    credentials: "include",
+                  }).then(() => {
+                    navigate("/");
+                  });
+                }}
+              >
+                Logout
+              </button>
+            </div>
           </div>
           {role === "Admin" && (
             <button
               className="add-event-btn"
-              onClick={() =>
-                navigate(
-                  activeSegment === "reminders" ? "/new-reminder" : "/new-event"
-                )
-              }
-            >
-              {activeSegment === "reminders" && "+ Add Reminder"}
-              {activeSegment === "events" && "+ Add Event"}
+              onClick={() =>navigate("/adminhomepage")}>
+              Manage Events
             </button>
           )}
         </div>
         <div className="cards">
-          {activeSegment === "events" &&
-            eventsDays.map(({ id, day, weekday, fullEvent }) => (
-              <button
-                key={id}
-                className={`card card-btn${
-                  selectedEvent?.id === id ? " is-active" : ""
-                }`}
-                onClick={() => {
-                  setSelectedEvent(fullEvent);
-                  fetchParticipationStatus(fullEvent.id);
-                }}
+          <div className="month-selector">
+            <label>
+              Month:&nbsp;
+              <select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
               >
-                {weekday} <br />
-                <span style={{ fontSize: "2em", fontWeight: "bold" }}>
-                  {day}
-                </span>
-              </button>
+                <option value="All">All</option>
+                {getAvailableMonths(
+                  activeSegment === "Events" ? Events : MyEvents
+                ).map((month) => (
+                  <option key={month} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          {activeSegment === "Events" &&
+            Object.entries(groupedEvents)
+  .filter(([month]) => selectedMonth === "All" || month === selectedMonth).map(([monthYear, events]) => (
+              <div key={monthYear}>
+                <h2 className="calendar-month">{monthYear}</h2>
+
+                <div className="cards">
+                  {events.map((event) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      isActive={selectedEvent?.id === event.id}
+                      onSelect={(event) => {
+                        setSelectedEvent(event);
+                        fetchParticipationStatus(event.id);
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
             ))}
-          {activeSegment === "reminders" &&
-            remindersDays.map(({ day, weekday }) => (
-              <button
-                key={day}
-                className={`card card-btn${
-                  activeCard === day ? " is-active" : ""
-                }`}
-                onClick={() => setActiveCard(day)}
-              >
-                {weekday} <br />{" "}
-                <span style={{ fontSize: "2em", fontWeight: "bold" }}>
-                  {day}
-                </span>
-              </button>
+
+          {activeSegment === "My Events" &&
+            Object.entries(groupedMyEvents).filter(([month]) => selectedMonth === "All" || month === selectedMonth).map(([monthYear, events]) => (
+              <div key={monthYear}>
+                <h2 className="calendar-month">{monthYear}</h2>
+
+                <div className="cards">
+                  {events.map((event) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      isActive={selectedEvent?.id === event.id}
+                      onSelect={(event) => {
+                        setSelectedEvent(event);
+                        fetchParticipationStatus(event.id);
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
             ))}
         </div>
 
-        {selectedEvent ? (
-          <div className="sidebar">
-            <>
-              <div className="sidebar-header">
-                <h2 className="top-text">{selectedEvent.title}</h2>
-
-                <div className="check-container">
-                  <button
-                    className="check-btn"
-                    aria-haspopup="menu"
-                    aria-label="Attendance"
-                  >
-                    <img src={checkmark} className="check" alt="" />
-                  </button>
-
-                  <div className="check-dropdown" role="menu">
-                    <button
-                      role="menuitem"
-                      onClick={() =>
-                        HandleEventParticipation(selectedEvent.id, userId)
-                      }
-                    >
-                      Attending
-                    </button>
-                    <button
-                      role="menuitem"
-                      onClick={() =>
-                        HandleRemoveParticipation(selectedEvent.id, userId)
-                      }
-                    >
-                      Not Attending
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <small>
-                {new Date(selectedEvent.eventDate).toLocaleDateString("en-US", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </small>
-
-              <br />
-              <p>{selectedEvent.description}</p>
-
-              <p>
-                <strong>Created by:</strong> {selectedEvent.createdBy}
-              </p>
-
-              {participationStatus && (
-                <p className="participation-status">
-                  <strong>Status:</strong> {participationStatus}
-                </p>
-              )}
-
-              {role === "Admin" && (
-                <a className="remove-event-link" href="#">
-                  Remove Event
-                </a>
-              )}
-            </>
-          </div>
-        ) : (
-          <p>Select date to view details</p>
-        )}
+        <EventSidebar
+          event={selectedEvent}
+          participationStatus={participationStatus}
+          role={role}
+          userId={userId}
+          onAttend={HandleEventParticipation}
+          onRemove={HandleRemoveParticipation}
+        />
       </section>
       {popupMessage && (
         <div className="ahp-modalBackdrop">
