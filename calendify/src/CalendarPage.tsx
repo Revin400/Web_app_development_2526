@@ -3,18 +3,19 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import calendifylogo from "./calendifylogo.png";
 import Profilepic from "./Default_pfp.png";
-import checkmark from "./check-img.png";
 import { useSession } from "./hooks/useSession";
-
+import { EventType } from "./types/EventType";
+import { EventCard } from "./EventCard";
+import { EventSidebar } from "./EventSidebar";
 
 const CalendarPage = () => {
   const location = useLocation();
-  const [activeCard, setActiveCard] = React.useState(null);
+  const [selectedMonth, setSelectedMonth] = useState<string>("All");
   const [activeSegment, setActiveSegment] = React.useState<
-  "Events" | "My Events"
->(() => {
-  return location.state?.activeSegment ?? "Events";
-});
+    "Events" | "My Events"
+  >(() => {
+    return location.state?.activeSegment ?? "Events";
+  });
   const navigate = useNavigate();
   const { userId, role, loading, isLoggedIn, name } = useSession();
   const [Events, setEvents] = React.useState<EventType[]>([]);
@@ -31,21 +32,13 @@ const CalendarPage = () => {
   >(null);
 
   const [MyEvents, setMyEvents] = useState<EventType[]>([]);
+  const groupedEvents = groupEventsByMonth(Events);
+  const groupedMyEvents = groupEventsByMonth(MyEvents);
 
-
-useEffect(() => {
-  setSelectedEvent(null);
-  setParticipationStatus(null);
-}, [activeSegment]);
-
-
-  type EventType = {
-    id: number;
-    title: string;
-    description: string;
-    eventDate: string;
-    createdBy: string;
-  };
+  useEffect(() => {
+    setSelectedEvent(null);
+    setParticipationStatus(null);
+  }, [activeSegment]);
 
   useEffect(() => {
     if (!loading && !isLoggedIn) {
@@ -54,7 +47,6 @@ useEffect(() => {
   }, [isLoggedIn, loading, navigate]);
 
   useEffect(() => {
-  
     fetchMyEvents();
     fetch("http://localhost:5000/api/Events", {
       credentials: "include",
@@ -66,20 +58,6 @@ useEffect(() => {
       .catch(() => console.log("Failed to load Events"));
   }, []);
 
-  const EventsDays = Events.map((e) => {
-    const date = new Date(e.eventDate);
-    const day = date.getDate();
-    const weekday = date
-      .toLocaleDateString("en-US", { weekday: "short" })
-      .toUpperCase();
-
-    return {
-      id: e.id,
-      day,
-      weekday,
-      fullEvent: e,
-    };
-  });
   const fetchMyEvents = async () => {
     try {
       const res = await fetch(
@@ -180,6 +158,39 @@ useEffect(() => {
     }
   };
 
+  function groupEventsByMonth(events: EventType[]) {
+    return events.reduce<Record<string, EventType[]>>((groups, event) => {
+      const date = new Date(event.eventDate);
+
+      const key = date.toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
+      });
+
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+
+      groups[key].push(event);
+      return groups;
+    }, {});
+  }
+
+  function getAvailableMonths(events: EventType[]) {
+    const months = new Set<string>();
+
+    events.forEach((event) => {
+      const date = new Date(event.eventDate);
+      const label = date.toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
+      });
+      months.add(label);
+    });
+
+    return Array.from(months);
+  }
+
   if (loading) {
     return (
       <div className="loading-screen">
@@ -207,8 +218,9 @@ useEffect(() => {
               type="button"
               role="tab"
               aria-selected={activeSegment === "Events"}
-              className={`seg-btn ${activeSegment === "Events" ? "is-active" : ""
-                }`}
+              className={`seg-btn ${
+                activeSegment === "Events" ? "is-active" : ""
+              }`}
               onClick={() => setActiveSegment("Events")}
             >
               Events
@@ -217,8 +229,9 @@ useEffect(() => {
               type="button"
               role="tab"
               aria-selected={activeSegment === "My Events"}
-              className={`seg-btn ${activeSegment === "My Events" ? "is-active" : ""
-                }`}
+              className={`seg-btn ${
+                activeSegment === "My Events" ? "is-active" : ""
+              }`}
               onClick={() => setActiveSegment("My Events")}
             >
               My Events
@@ -260,118 +273,77 @@ useEffect(() => {
           )}
         </div>
         <div className="cards">
-          {activeSegment === "Events" &&
-            EventsDays.map(({ id, day, weekday, fullEvent }) => (
-              <button
-                key={id}
-                className={`card card-btn${selectedEvent?.id === id ? " is-active" : ""
-                  }`}
-                onClick={() => {
-                  setSelectedEvent(fullEvent);
-                  fetchParticipationStatus(fullEvent.id);
-                }}
+          <div className="month-selector">
+            <label>
+              Month:&nbsp;
+              <select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
               >
-                {weekday} <br />
-                <span style={{ fontSize: "2em", fontWeight: "bold" }}>
-                  {day}
-                </span>
-              </button>
-            ))}
-          {activeSegment === "My Events" &&
-            MyEvents.map((event) => {
-              const date = new Date(event.eventDate);
-              const day = date.getDate();
-              const weekday = date
-                .toLocaleDateString("en-US", { weekday: "short" })
-                .toUpperCase();
+                <option value="All">All</option>
+                {getAvailableMonths(
+                  activeSegment === "Events" ? Events : MyEvents
+                ).map((month) => (
+                  <option key={month} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
 
-              return (
-                <button
-                  key={event.id}
-                  className={`card card-btn${selectedEvent?.id === event.id ? " is-active" : ""
-                    }`}
-                  onClick={() => {
-                    setSelectedEvent(event);
-                    fetchParticipationStatus(event.id);
-                  }}
-                >
-                  {weekday} <br />
-                  <span style={{ fontSize: "2em", fontWeight: "bold" }}>
-                    {day}
-                  </span>
-                </button>
-              );
-            })}
-        </div>
+          {activeSegment === "Events" &&
+            Object.entries(groupedEvents)
+  .filter(([month]) => selectedMonth === "All" || month === selectedMonth).map(([monthYear, events]) => (
+              <div key={monthYear}>
+                <h2 className="calendar-month">{monthYear}</h2>
 
-        {selectedEvent ? (
-          <div className="sidebar">
-            <>
-              <div className="sidebar-header">
-                <h2 className="top-text">{selectedEvent.title}</h2>
-
-                <div className="check-container">
-                  <button
-                    className="check-btn"
-                    aria-haspopup="menu"
-                    aria-label="Attendance"
-                  >
-                    <img src={checkmark} className="check" alt="" />
-                  </button>
-
-                  <div className="check-dropdown" role="menu">
-                    <button
-                      role="menuitem"
-                      onClick={() =>
-                        HandleEventParticipation(selectedEvent.id, userId)
-                      }
-                    >
-                      Attending
-                    </button>
-                    <button
-                      role="menuitem"
-                      onClick={() =>
-                        HandleRemoveParticipation(selectedEvent.id, userId)
-                      }
-                    >
-                      Not Attending
-                    </button>
-                  </div>
+                <div className="cards">
+                  {events.map((event) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      isActive={selectedEvent?.id === event.id}
+                      onSelect={(event) => {
+                        setSelectedEvent(event);
+                        fetchParticipationStatus(event.id);
+                      }}
+                    />
+                  ))}
                 </div>
               </div>
+            ))}
 
-              <small>
-                {new Date(selectedEvent.eventDate).toLocaleDateString("en-US", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </small>
+          {activeSegment === "My Events" &&
+            Object.entries(groupedMyEvents).filter(([month]) => selectedMonth === "All" || month === selectedMonth).map(([monthYear, events]) => (
+              <div key={monthYear}>
+                <h2 className="calendar-month">{monthYear}</h2>
 
-              <br />
-              <p>{selectedEvent.description}</p>
+                <div className="cards">
+                  {events.map((event) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      isActive={selectedEvent?.id === event.id}
+                      onSelect={(event) => {
+                        setSelectedEvent(event);
+                        fetchParticipationStatus(event.id);
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+        </div>
 
-              <p>
-                <strong>Created by:</strong> {selectedEvent.createdBy}
-              </p>
-
-              {participationStatus && (
-                <p className="participation-status">
-                  <strong>Status:</strong> {participationStatus}
-                </p>
-              )}
-
-              {role === "Admin" && (
-                <a className="remove-event-link" href="#">
-                  Remove Event
-                </a>
-              )}
-            </>
-          </div>
-        ) : (
-          <p>Select date to view details</p>
-        )}
+        <EventSidebar
+          event={selectedEvent}
+          participationStatus={participationStatus}
+          role={role}
+          userId={userId}
+          onAttend={HandleEventParticipation}
+          onRemove={HandleRemoveParticipation}
+        />
       </section>
       {popupMessage && (
         <div className="ahp-modalBackdrop">
