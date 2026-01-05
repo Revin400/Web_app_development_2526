@@ -1,5 +1,7 @@
 import React, { useEffect, useState, FormEvent, ChangeEvent, FC } from "react";
 import "./AdminHomePage.css";
+import arrow from "../arrow.png";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE = "http://localhost:5000/api/events";
 
@@ -24,10 +26,12 @@ const AdminHomePage: FC = () => {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-
+  
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formValues, setFormValues] = useState<EventItem>(emptyForm);
+  const navigate = useNavigate();
+  
   
   const DateFromTime = (dateTimeStr: string) => {
     if (!dateTimeStr) return "";
@@ -45,10 +49,10 @@ const AdminHomePage: FC = () => {
     try {
       setLoading(true);
       setError("");
-
+      
       const res = await fetch(API_BASE);
       if (!res.ok) throw new Error("Failed to load events");
-
+      
       const data: EventItem[] = await res.json();
       setEvents(
         data.map((e) => ({
@@ -62,11 +66,11 @@ const AdminHomePage: FC = () => {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     loadEvents();
   }, []);
-
+  
   // delete
   const handleDelete = async (id: number) => {
     if (!window.confirm("Delete this event?")) return;
@@ -74,13 +78,13 @@ const AdminHomePage: FC = () => {
       const res = await fetch(`${API_BASE}/${id}`, { credentials: "include", method: "DELETE" });
       if (!res.ok && res.status !== 204)
         throw new Error("Failed to delete event");
-
+      
       setEvents((prev) => prev.filter((e) => e.id !== id));
     } catch (err: any) {
       alert(err.message ?? "Error deleting event");
     }
   };
-
+  
   // open forms
   const openAddForm = () => {
     setEditingId(null);
@@ -156,6 +160,9 @@ const AdminHomePage: FC = () => {
   return (
     <div className="ahp-root">
       <header className="ahp-header ahp-container">
+          <button className="check-btn"  onClick={() => navigate("/calendar")}>
+            <img src={arrow} className="check" alt="" />
+          </button>
         <h1 className="ahp-title">Event Management</h1>
         <div className="ahp-headerActions">
           <button className="ahp-btn ahp-btnDark" onClick={openAddForm}>

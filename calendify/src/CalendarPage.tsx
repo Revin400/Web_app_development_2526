@@ -242,8 +242,6 @@ const CalendarPage = () => {
             <img src={Profilepic} alt="User profile" className="profile-pic" />
 
             <div className="profile-dropdown">
-              <button>Profile</button>
-              <button>My Account</button>
               <button onClick={() => navigate("/settings")}>Settings</button>
               <button
                 onClick={() => {
@@ -262,13 +260,8 @@ const CalendarPage = () => {
           {role === "Admin" && (
             <button
               className="add-event-btn"
-              onClick={() =>
-                navigate(
-                  activeSegment === "My Events" ? "/new-reminder" : "/new-event"
-                )
-              }
-            >
-              {activeSegment === "My Events" && "+ Add Event"}
+              onClick={() =>navigate("/adminhomepage")}>
+              Manage Events
             </button>
           )}
         </div>
