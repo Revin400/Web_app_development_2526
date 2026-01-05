@@ -133,7 +133,6 @@ const AdminHomePage: FC = () => {
         res = await fetch(API_BASE, {
           credentials : 'include',
           method: "POST",
-          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
@@ -142,7 +141,6 @@ const AdminHomePage: FC = () => {
         res = await fetch(`${API_BASE}/${editingId}`, {
           credentials : 'include',
           method: "PUT",
-          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
