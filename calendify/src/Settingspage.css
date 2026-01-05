@@ -1,9 +1,9 @@
 :root{
-  --bg: #022626;        /* deep teal background */
+  --bg: #022626;        
   --seg-outline:#1c6f6d;
   --seg-bg:#113c3a;
-  --seg-fill:#7f6f5e;   /* selected pill fill */
-  --card:#FFBB98;       /* card background */
+  --seg-fill:#7f6f5e;   
+  --card:#FFBB98;   
   --shadow: 0 5px 10px rgba(0, 0, 0, 0.685);
   --radius: 14px;
   --pill: 999px;
@@ -126,7 +126,7 @@ body{
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,.45);
-  display: none;                /* toggle naar flex via JS */
+  display: none;          
   align-items: center;
   justify-content: center;
   z-index: 2000;
