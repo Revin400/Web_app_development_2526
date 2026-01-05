@@ -21,11 +21,6 @@ const emptyForm: EventItem = {
   createdBy: "",
 };
 
-const formatDateForDisplay = (value: string) => {
-  if (!value) return "";
-  if (value.length >= 10) return value.slice(0, 10);
-  return value;
-};
 
 const AdminHomePage: FC = () => {
   const [events, setEvents] = useState<EventItem[]>([]);
@@ -37,6 +32,18 @@ const AdminHomePage: FC = () => {
   const [formValues, setFormValues] = useState<EventItem>(emptyForm);
   const navigate = useNavigate();
   
+  
+  const DateFromTime = (dateTimeStr: string) => {
+    if (!dateTimeStr) return "";
+    const date = new Date(dateTimeStr);
+    return date.toISOString().split('T')[0];
+    };
+  const TimeFromTime = (dateTimeStr: string) => {
+    if (!dateTimeStr) return "";
+    const date = new Date(dateTimeStr);
+    return date.toTimeString().split(' ')[0];
+    };
+
   // load events
   const loadEvents = async () => {
     try {
@@ -50,7 +57,7 @@ const AdminHomePage: FC = () => {
       setEvents(
         data.map((e) => ({
           ...e,
-          eventDate: formatDateForDisplay(e.eventDate),
+          eventDate: e.eventDate,
         }))
       );
     } catch (err: any) {
@@ -68,7 +75,7 @@ const AdminHomePage: FC = () => {
   const handleDelete = async (id: number) => {
     if (!window.confirm("Delete this event?")) return;
     try {
-      const res = await fetch(`${API_BASE}/${id}`, { method: "DELETE" });
+      const res = await fetch(`${API_BASE}/${id}`, { credentials: "include", method: "DELETE" });
       if (!res.ok && res.status !== 204)
         throw new Error("Failed to delete event");
       
@@ -91,7 +98,7 @@ const AdminHomePage: FC = () => {
       id: ev.id,
       title: ev.title,
       description: ev.description,
-      eventDate: formatDateForDisplay(ev.eventDate),
+      eventDate: ev.eventDate,
       createdBy: ev.createdBy,
     });
     setIsFormOpen(true);
@@ -122,8 +129,9 @@ const AdminHomePage: FC = () => {
     try {
       let res: Response;
       if (editingId == null) {
-        // create
+        // create  
         res = await fetch(API_BASE, {
+          credentials : 'include',
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -132,6 +140,7 @@ const AdminHomePage: FC = () => {
       } else {
         // update
         res = await fetch(`${API_BASE}/${editingId}`, {
+          credentials : 'include',
           method: "PUT",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -177,6 +186,7 @@ const AdminHomePage: FC = () => {
                     <th className="ahp-cell">Title</th>
                     <th className="ahp-cell">Description</th>
                     <th className="ahp-cell">Date</th>
+                    <th className="ahp-cell">Time</th>
                     <th className="ahp-cell">Created By</th>
                     <th className="ahp-cell">Actions</th>
                   </tr>
@@ -187,9 +197,8 @@ const AdminHomePage: FC = () => {
                       <td className="ahp-cell">{idx + 1}</td>
                       <td className="ahp-cell">{e.title}</td>
                       <td className="ahp-cell">{e.description}</td>
-                      <td className="ahp-cell">
-                        {formatDateForDisplay(e.eventDate)}
-                      </td>
+                      <td className="ahp-cell">{DateFromTime(e.eventDate)}</td>
+                      <td className="ahp-cell">{TimeFromTime(e.eventDate)}</td>
                       <td className="ahp-cell">{e.createdBy}</td>
                       <td className="ahp-cell">
                         <div className="ahp-rowActions">
@@ -249,18 +258,16 @@ const AdminHomePage: FC = () => {
                   onChange={handleInputChange}
                 />
               </label>
-
-              <label className="ahp-formField">
+                <label className = "ahp-formField">
                 <span>Date</span>
                 <input
                   name="eventDate"
-                  type="date"
+                  type = "datetime-local"
                   value={formValues.eventDate}
                   onChange={handleInputChange}
                   required
                 />
               </label>
-
               <label className="ahp-formField">
                 <span>Created By</span>
                 <input
