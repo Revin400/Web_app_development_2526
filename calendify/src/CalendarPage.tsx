@@ -262,13 +262,8 @@ const CalendarPage = () => {
           {role === "Admin" && (
             <button
               className="add-event-btn"
-              onClick={() =>
-                navigate(
-                  activeSegment === "My Events" ? "/new-reminder" : "/new-event"
-                )
-              }
-            >
-              {activeSegment === "My Events" && "+ Add Event"}
+              onClick={() =>navigate("/adminhomepage")}>
+              Manage Events
             </button>
           )}
         </div>
