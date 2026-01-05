@@ -138,10 +138,8 @@ const SettingsPage = () => {
   return (
     <div className="settings-page">
       <div className="settings-sidebar">
-        <a onClick={() => navigate("/settings")}>My Settings </a>
-        <a onClick={() => navigate("/calendar")}>My Reminders</a>
-        <a onClick={() => navigate("#")}>Appearance</a>
-        <a onClick={() => navigate("/new-Reminders")}>New Reminders</a>
+        <a onClick={() => navigate("#")}>Change Password </a>
+        <a onClick={() => navigate("#")}>Change Email</a>
         <a onClick={() => HandleLogOut()}>Log Out</a>
       </div>
 

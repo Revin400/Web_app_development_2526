@@ -1,11 +1,7 @@
-import React, {
-  useEffect,
-  useState,
-  FormEvent,
-  ChangeEvent,
-  FC,
-} from "react";
+import React, { useEffect, useState, FormEvent, ChangeEvent, FC } from "react";
 import "./AdminHomePage.css";
+import arrow from "../arrow.png";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE = "http://localhost:5000/api/events";
 
@@ -17,7 +13,6 @@ interface EventItem {
   createdBy: string;
 }
 
-
 const emptyForm: EventItem = {
   id: 0,
   title: "",
@@ -26,35 +21,43 @@ const emptyForm: EventItem = {
   createdBy: "",
 };
 
-const formatDateForDisplay = (value: string) => {
-  if (!value) return "";
-  if (value.length >= 10) return value.slice(0, 10);
-  return value;
-};
 
 const AdminHomePage: FC = () => {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-
+  
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formValues, setFormValues] = useState<EventItem>(emptyForm);
+  const navigate = useNavigate();
+  
+  
+  const DateFromTime = (dateTimeStr: string) => {
+    if (!dateTimeStr) return "";
+    const date = new Date(dateTimeStr);
+    return date.toISOString().split('T')[0];
+    };
+  const TimeFromTime = (dateTimeStr: string) => {
+    if (!dateTimeStr) return "";
+    const date = new Date(dateTimeStr);
+    return date.toTimeString().split(' ')[0];
+    };
 
   // load events
   const loadEvents = async () => {
     try {
       setLoading(true);
       setError("");
-
+      
       const res = await fetch(API_BASE);
       if (!res.ok) throw new Error("Failed to load events");
-
+      
       const data: EventItem[] = await res.json();
       setEvents(
         data.map((e) => ({
           ...e,
-          eventDate: formatDateForDisplay(e.eventDate),
+          eventDate: e.eventDate,
         }))
       );
     } catch (err: any) {
@@ -63,25 +66,25 @@ const AdminHomePage: FC = () => {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     loadEvents();
   }, []);
-
+  
   // delete
   const handleDelete = async (id: number) => {
     if (!window.confirm("Delete this event?")) return;
     try {
-      const res = await fetch(`${API_BASE}/${id}`, { method: "DELETE" });
+      const res = await fetch(`${API_BASE}/${id}`, { credentials: "include", method: "DELETE" });
       if (!res.ok && res.status !== 204)
         throw new Error("Failed to delete event");
-
+      
       setEvents((prev) => prev.filter((e) => e.id !== id));
     } catch (err: any) {
       alert(err.message ?? "Error deleting event");
     }
   };
-
+  
   // open forms
   const openAddForm = () => {
     setEditingId(null);
@@ -95,7 +98,7 @@ const AdminHomePage: FC = () => {
       id: ev.id,
       title: ev.title,
       description: ev.description,
-      eventDate: formatDateForDisplay(ev.eventDate),
+      eventDate: ev.eventDate,
       createdBy: ev.createdBy,
     });
     setIsFormOpen(true);
@@ -126,8 +129,9 @@ const AdminHomePage: FC = () => {
     try {
       let res: Response;
       if (editingId == null) {
-        // create
+        // create  
         res = await fetch(API_BASE, {
+          credentials : 'include',
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -135,6 +139,7 @@ const AdminHomePage: FC = () => {
       } else {
         // update
         res = await fetch(`${API_BASE}/${editingId}`, {
+          credentials : 'include',
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -153,6 +158,9 @@ const AdminHomePage: FC = () => {
   return (
     <div className="ahp-root">
       <header className="ahp-header ahp-container">
+          <button className="check-btn"  onClick={() => navigate("/calendar")}>
+            <img src={arrow} className="check" alt="" />
+          </button>
         <h1 className="ahp-title">Event Management</h1>
         <div className="ahp-headerActions">
           <button className="ahp-btn ahp-btnDark" onClick={openAddForm}>
@@ -176,6 +184,7 @@ const AdminHomePage: FC = () => {
                     <th className="ahp-cell">Title</th>
                     <th className="ahp-cell">Description</th>
                     <th className="ahp-cell">Date</th>
+                    <th className="ahp-cell">Time</th>
                     <th className="ahp-cell">Created By</th>
                     <th className="ahp-cell">Actions</th>
                   </tr>
@@ -186,9 +195,8 @@ const AdminHomePage: FC = () => {
                       <td className="ahp-cell">{idx + 1}</td>
                       <td className="ahp-cell">{e.title}</td>
                       <td className="ahp-cell">{e.description}</td>
-                      <td className="ahp-cell">
-                        {formatDateForDisplay(e.eventDate)}
-                      </td>
+                      <td className="ahp-cell">{DateFromTime(e.eventDate)}</td>
+                      <td className="ahp-cell">{TimeFromTime(e.eventDate)}</td>
                       <td className="ahp-cell">{e.createdBy}</td>
                       <td className="ahp-cell">
                         <div className="ahp-rowActions">
@@ -248,18 +256,16 @@ const AdminHomePage: FC = () => {
                   onChange={handleInputChange}
                 />
               </label>
-
-              <label className="ahp-formField">
+                <label className = "ahp-formField">
                 <span>Date</span>
                 <input
                   name="eventDate"
-                  type="date"
+                  type = "datetime-local"
                   value={formValues.eventDate}
                   onChange={handleInputChange}
                   required
                 />
               </label>
-
               <label className="ahp-formField">
                 <span>Created By</span>
                 <input
@@ -272,11 +278,7 @@ const AdminHomePage: FC = () => {
               </label>
 
               <div className="ahp-formActions">
-                <button
-                  type="button"
-                  className="ahp-btn"
-                  onClick={closeForm}
-                >
+                <button type="button" className="ahp-btn" onClick={closeForm}>
                   Cancel
                 </button>
                 <button type="submit" className="ahp-btn ahp-btnDark">
