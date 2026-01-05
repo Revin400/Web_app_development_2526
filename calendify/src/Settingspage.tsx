@@ -138,9 +138,8 @@ const SettingsPage = () => {
   return (
     <div className="settings-page">
       <div className="settings-sidebar">
-        <a onClick={() => navigate("#")}>Change Password </a>
-        
-        <a onClick={() => navigate("#")}>Change Email</a>
+        <a onClick={() => setActiveModal("password")}>Change Password </a>    
+        <a onClick={() => setActiveModal("email")}>Change Email</a>
         <a onClick={() => HandleLogOut()}>Log Out</a>
       </div>
 
