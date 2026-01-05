@@ -17,6 +17,7 @@ const SettingsPage = () => {
 
   const [email, setEmail] = useState("");
   const [emailConfirm, setEmailConfirm] = useState("");
+ const [emailConfirm1, setEmailConfirm1] = useState("");
 
   const [notifEmail, setNotifEmail] = useState(true);
   const [notifInApp, setNotifInApp] = useState(true);
@@ -354,15 +355,28 @@ const SettingsPage = () => {
                     placeholder="name@example.com"
                   />
                 </div>
-              </div>
 
-              {email && emailConfirm && email !== emailConfirm ? (
+                <div className="settings-form-row re full">
+                  <span className="settings-form-label">email bevestigen</span>
+                  <input
+                    className="settings-input"
+                    type="email"
+                    value={emailConfirm1}
+                    onChange={(e) => setEmailConfirm1(e.target.value)}
+                    placeholder="name@example.com"
+                  />
+                </div>
+
+              </div>
+              
+
+                {emailConfirm && emailConfirm1 && emailConfirm !== emailConfirm1 ? (
                 <div className="settings-helper" style={{ color: "#ffcfbd" }}>
                   E-mailadressen komen niet overeen.
                 </div>
-              ) : (
+                ) : (
                 <div className="settings-helper">Je krijgt eventueel een bevestigingsmail (als je dat zo instelt).</div>
-              )}
+                )}
             </div>
 
             <div className="settings-modal-footer">
@@ -373,10 +387,10 @@ const SettingsPage = () => {
                 className="settings-btn settings-btn-primary"
                 onClick={handleSaveEmail}
                 disabled={!email || email !== emailConfirm}
-                style={{
-                  opacity: !email || email !== emailConfirm ? 0.55 : 1,
-                  cursor: !email || email !== emailConfirm ? "not-allowed" : "pointer",
-                }}
+                // style={{
+                //   opacity: !email || email !== emailConfirm ? 0.55 : 1,
+                //   cursor: !email || email !== emailConfirm ? "not-allowed" : "pointer",
+                // }}
               >
                 Opslaan
               </button>
