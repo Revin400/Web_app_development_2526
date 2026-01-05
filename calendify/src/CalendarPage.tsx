@@ -294,7 +294,7 @@ const CalendarPage = () => {
                 <div className="cards">
                   {events.map((event) => (
                     <EventCard
-                      key={event.id}
+                      // key={event.id}
                       event={event}
                       isActive={selectedEvent?.id === event.id}
                       onSelect={(event) => {
@@ -315,7 +315,7 @@ const CalendarPage = () => {
                 <div className="cards">
                   {events.map((event) => (
                     <EventCard
-                      key={event.id}
+                      // key={event.id}
                       event={event}
                       isActive={selectedEvent?.id === event.id}
                       onSelect={(event) => {
