@@ -2,7 +2,7 @@ import "./Settingspage.css";
 import React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import React from "react"
 type ModalType = "password" | "email" | "notifications" | null;
 
 const SettingsPage = () => {
