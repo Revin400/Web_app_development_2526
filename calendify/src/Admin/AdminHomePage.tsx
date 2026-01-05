@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  FormEvent,
-  ChangeEvent,
-  FC,
-} from "react";
+import React, { useEffect, useState, FormEvent, ChangeEvent, FC } from "react";
 import "./AdminHomePage.css";
 
 const API_BASE = "http://localhost:5000/api/events";
@@ -16,7 +10,6 @@ interface EventItem {
   eventDate: string;
   createdBy: string;
 }
-
 
 const emptyForm: EventItem = {
   id: 0,
@@ -129,6 +122,7 @@ const AdminHomePage: FC = () => {
         // create
         res = await fetch(API_BASE, {
           method: "POST",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
@@ -136,6 +130,7 @@ const AdminHomePage: FC = () => {
         // update
         res = await fetch(`${API_BASE}/${editingId}`, {
           method: "PUT",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
@@ -272,11 +267,7 @@ const AdminHomePage: FC = () => {
               </label>
 
               <div className="ahp-formActions">
-                <button
-                  type="button"
-                  className="ahp-btn"
-                  onClick={closeForm}
-                >
+                <button type="button" className="ahp-btn" onClick={closeForm}>
                   Cancel
                 </button>
                 <button type="submit" className="ahp-btn ahp-btnDark">
