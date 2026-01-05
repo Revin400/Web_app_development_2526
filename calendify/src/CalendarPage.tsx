@@ -242,8 +242,6 @@ const CalendarPage = () => {
             <img src={Profilepic} alt="User profile" className="profile-pic" />
 
             <div className="profile-dropdown">
-              <button>Profile</button>
-              <button>My Account</button>
               <button onClick={() => navigate("/settings")}>Settings</button>
               <button
                 onClick={() => {
