@@ -25,10 +25,10 @@ const emptyForm: EventItem = {
 
 
 const AdminHomePage: FC = () => {
+  const { isLoggedIn, role, loading: sessionLoading } = useSession();
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-  const { isLoggedIn, role, loading: sessionLoading } = useSession();
 
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -61,18 +61,6 @@ const AdminHomePage: FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (!loading) {
-          if (!isLoggedIn) {
-            navigate("/login");
-          }
-
-          if (role !== "Admin") {
-            navigate("/calendar");
-          }
-          loadEvents();
-        }
-      }, [isLoggedIn, role, loading, navigate]);
 
   // load events
   const loadEvents = async () => {
@@ -104,7 +92,7 @@ const AdminHomePage: FC = () => {
     if (!window.confirm("Delete this event?")) return;
     try {
       const res = await fetch(`${API_BASE}/${id}`, { credentials: "include", method: "DELETE" });
-      if (!res.ok && res.status !== 204)
+      if (!res.ok || res.status !== 204)
         throw new Error("Failed to delete event");
       
       setEvents((prev) => prev.filter((e) => e.id !== id));
@@ -113,6 +101,20 @@ const AdminHomePage: FC = () => {
     }
   };
   
+
+  useEffect(() => {
+    if (sessionLoading) return;
+
+    if (isLoggedIn && role === "Admin") {
+      loadEvents();
+    }
+    else
+    {
+      navigate("/login");
+    }
+  }, [isLoggedIn, role, sessionLoading]);
+
+
   // open forms
   const openAddForm = () => {
     setEditingId(null);
@@ -151,7 +153,7 @@ const AdminHomePage: FC = () => {
 
     const payload: EventItem = {
       ...formValues,
-      eventDate: formValues.eventDate, // yyyy-MM-dd
+      eventDate: formValues.eventDate, 
     };
 
     try {
@@ -194,7 +196,7 @@ const AdminHomePage: FC = () => {
           <button className="ahp-btn ahp-btnDark" onClick={openAddForm}>
             Add Event
           </button>
-          <button className="ahp-btn">Logout</button>
+          <button className="ahp-btn" onClick={HandleLogout}>Logout</button>
         </div>
       </header>
 
@@ -246,7 +248,7 @@ const AdminHomePage: FC = () => {
                   ))}
                   {events.length === 0 && !loading && (
                     <tr className="ahp-row">
-                      <td className="ahp-cell ahp-empty" colSpan={6}>
+                      <td className="ahp-cell ahp-empty" colSpan={7}>
                         No events yet.
                       </td>
                     </tr>

@@ -1,6 +1,7 @@
 import { EventType } from "./types/EventType";
 
 type EventCardProps = {
+  key ?: number;
   event: EventType;
   isActive: boolean;
   onSelect: (event: EventType) => void;
